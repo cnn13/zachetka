@@ -53,6 +53,9 @@ python -m venv venv
 
 # 3. Включить его
 venv\Scripts\activate          # Windows
+ **Windows: ошибка «выполнение сценариев отключено в этой системе»?**
+ Выполните один раз: `Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned`,
+ответьте `Y` и снова запустите `venv\Scripts\activate`.
 source venv/bin/activate       # macOS и Linux
 
 # 4. Установить Django
