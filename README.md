@@ -45,7 +45,7 @@
 
 ```bash
 # 1. Скачать проект
-git clone <https://github.com/cnn13/zachetka>
+git clone https://github.com/cnn13/zachetka.git
 cd zachetka
 
 # 2. Создать виртуальное окружение — отдельную «коробку» для библиотек проекта
