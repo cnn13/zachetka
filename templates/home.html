@@ -3,26 +3,35 @@
 {% block title %}Главная{% endblock %}
 
 {% block content %}
-<div class="p-4 bg-white rounded-3 shadow-sm mb-4">
-  <h1 class="h2">Зачётка</h1>
-  <p class="lead mb-0">Лекции, билеты и таймер для подготовки к сессии — в одном месте.</p>
+<div class="p-4 bg-dark rounded-3 shadow-sm mb-4 border border-secondary">
+    <h1 class="h2 text-white fw-bold">Зачётка</h1>
+    <p class="lead mb-0 text-light">Лекции, билеты и таймер для подготовки к сессии — в одном месте.</p>
 </div>
 
 <div class="row g-3">
-  <div class="col-md-4">
-    <a class="card h-100 text-decoration-none" href="{% url 'materials:index' %}">
-      <div class="card-body"><h2 class="h5">Архив</h2><p class="text-muted mb-0">Лекции и конспекты потока</p></div>
-    </a>
-  </div>
-  <div class="col-md-4">
-    <a class="card h-100 text-decoration-none" href="{% url 'tickets:index' %}">
-      <div class="card-body"><h2 class="h5">Билеты</h2><p class="text-muted mb-0">Чек-лист и случайный билет</p></div>
-    </a>
-  </div>
-  <div class="col-md-4">
-    <a class="card h-100 text-decoration-none" href="{% url 'timer:index' %}">
-      <div class="card-body"><h2 class="h5">Таймер</h2><p class="text-muted mb-0">Помодоро и статистика</p></div>
-    </a>
-  </div>
+    <div class="col-md-4">
+        <a class="card h-100 text-decoration-none" href="{% url 'materials:index' %}">
+            <div class="card-body">
+                <h2 class="h5 text-white">Архив</h2>
+                <p class="text-muted mb-0">Лекции и конспекты потока</p>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-4">
+        <a class="card h-100 text-decoration-none" href="{% url 'tickets:index' %}">
+            <div class="card-body">
+                <h2 class="h5 text-white">Билеты</h2>
+                <p class="text-muted mb-0">Чек-лист и случайный билет</p>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-4">
+        <a class="card h-100 text-decoration-none" href="{% url 'timer:index' %}">
+            <div class="card-body">
+                <h2 class="h5 text-white">Таймер</h2>
+                <p class="text-muted mb-0">Помодоро и статистика</p>
+            </div>
+        </a>
+    </div>
 </div>
 {% endblock %}

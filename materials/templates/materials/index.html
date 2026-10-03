@@ -3,9 +3,93 @@
 {% block title %}Архив материалов{% endblock %}
 
 {% block content %}
-<h1 class="h3 mb-3">Архив материалов</h1>
-<div class="alert alert-secondary">
-  Здесь будет архив лекций и конспектов: загрузка, фильтры, кнопка «полезно».<br>
-  <small>Ответственный: участник «А». Файл шаблона: <code>materials/templates/materials/index.html</code></small>
+<div class="container mt-4">
+    <!-- Заголовок и фильтры -->
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
+        <h1 class="h3 mb-0 text-white fw-bold">Архив материалов</h1>
+
+        <!-- Быстрые фильтры по предметам -->
+        <div class="btn-group font-monospace" role="group">
+            <button type="button" class="btn btn-outline-success active btn-sm">Все</button>
+            <button type="button" class="btn btn-outline-secondary btn-sm text-white">Матанализ</button>
+            <button type="button" class="btn btn-outline-secondary btn-sm text-white">C++</button>
+            <button type="button" class="btn btn-outline-secondary btn-sm text-white">Python</button>
+        </div>
+    </div>
+
+    <!-- Сетка материалов (Примеры лекций) -->
+    <div class="row g-4">
+        <!-- Карточка 1: Матанализ -->
+        <div class="col-md-6 col-lg-4">
+            <div class="card bg-dark text-white h-100 shadow-sm border border-secondary">
+                <div class="card-body d-flex flex-column">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <span class="badge bg-secondary text-dark fw-bold">Матанализ</span>
+                        <small class="text-muted font-monospace">03.10.2026</small>
+                    </div>
+                    <h3 class="h5 card-title fw-bold">Лекция 1: Пределы и непрерывность</h3>
+                    <p class="card-text text-muted small flex-grow-1">Полный конспект первой лекции с разбором теорем и практическими примерами для подготовки к коллоквиуму.</p>
+
+                    <div class="d-flex gap-2 mt-3">
+                        <a href="#" class="btn btn-success btn-sm flex-grow-1 fw-bold">Просмотр</a>
+                        <a href="#" class="btn btn-outline-light btn-sm px-3" title="Скачать">
+                            <svg xmlns="http://w3.org" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
+                                <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v2.5a.5.5 0 0 1 1 0v-2.5a2 2 0 0 0-2-2H2a2 2 0 0 0-2 2z" />
+                                <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Карточка 2: Язык C++ -->
+        <div class="col-md-6 col-lg-4">
+            <div class="card bg-dark text-white h-100 shadow-sm border border-secondary">
+                <div class="card-body d-flex flex-column">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <span class="badge bg-success text-dark fw-bold">C++</span>
+                        <small class="text-muted font-monospace">01.10.2026</small>
+                    </div>
+                    <h3 class="h5 card-title fw-bold">Шпаргалка: Указатели и ссылки</h3>
+                    <p class="card-text text-muted small flex-grow-1">Краткий справочник по работе с памятью, разыменованию, передаче аргументов в функции и управлению указателями.</p>
+
+                    <div class="d-flex gap-2 mt-3">
+                        <a href="#" class="btn btn-success btn-sm flex-grow-1 fw-bold">Просмотр</a>
+                        <a href="#" class="btn btn-outline-light btn-sm px-3" title="Скачать">
+                            <svg xmlns="http://w3.org" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
+                                <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v2.5a.5.5 0 0 1 1 0v-2.5a2 2 0 0 0-2-2H2a2 2 0 0 0-2 2z" />
+                                <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Карточка 3: Python -->
+        <div class="col-md-6 col-lg-4">
+            <div class="card bg-dark text-white h-100 shadow-sm border border-secondary">
+                <div class="card-body d-flex flex-column">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <span class="badge bg-info text-dark fw-bold">Python</span>
+                        <small class="text-muted font-monospace">28.09.2026</small>
+                    </div>
+                    <h3 class="h5 card-title fw-bold">Лабораторная 1: ООП основы</h3>
+                    <p class="card-text text-muted small flex-grow-1">Шаблон проекта и требования к выполнению первой лабораторной работы по объектно-ориентированному программированию.</p>
+
+                    <div class="d-flex gap-2 mt-3">
+                        <a href="#" class="btn btn-success btn-sm flex-grow-1 fw-bold">Просмотр</a>
+                        <a href="#" class="btn btn-outline-light btn-sm px-3" title="Скачать">
+                            <svg xmlns="http://w3.org" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
+                                <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v2.5a.5.5 0 0 1 1 0v-2.5a2 2 0 0 0-2-2H2a2 2 0 0 0-2 2z" />
+                                <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}
