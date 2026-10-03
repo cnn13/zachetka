@@ -1,11 +1,202 @@
 {% extends "base.html" %}
 
-{% block title %}Билеты{% endblock %}
+{% block title %}Билеты к экзамену{% endblock %}
 
 {% block content %}
-<h1 class="h3 mb-3">Билеты</h1>
-<div class="alert alert-secondary">
-  Здесь будут билеты: список по предмету, чек-лист готовности и случайный билет.<br>
-  <small>Ответственный: участник «Б». Файл шаблона: <code>tickets/templates/tickets/index.html</code></small>
+<style>
+    /* Стили для красивого отображения математических дробей без внешних библиотек */
+    .math-block {
+        font-family: "Times New Roman", Times, serif;
+        font-size: 1.3rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        vertical-align: middle;
+    }
+
+    .math-fraction {
+        display: inline-flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: 0 4px;
+        vertical-align: middle;
+        font-size: 1.1rem;
+    }
+
+    .math-numerator {
+        border-bottom: 2px solid #39ff14;
+        width: 100%;
+        padding-bottom: 2px;
+    }
+
+    .math-denominator {
+        padding-top: 2px;
+        width: 100%;
+    }
+
+    .math-limit {
+        display: inline-flex;
+        flex-direction: column;
+        align-items: center;
+        line-height: 0.9;
+        font-size: 1.1rem;
+        margin-right: 5px;
+    }
+
+    .math-sub {
+        font-size: 0.65rem;
+        color: #888;
+        margin-top: 2px;
+    }
+
+    .math-highlight {
+        color: #39ff14;
+        font-weight: bold;
+    }
+</style>
+
+<div class="container mt-4">
+    <!-- Шапка раздела -->
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
+        <div>
+            <h1 class="h3 mb-1 text-white fw-bold">Математический анализ</h1>
+            <p class="text-muted small mb-0 font-monospace">Семестр 1 &bull; Всего билетов: 3</p>
+        </div>
+
+        <a href="#" class="btn btn-success fw-bold px-4 py-2 shadow-sm d-flex align-items-center justify-content-center">
+            <span class="me-2">🎲</span> Случайный билет
+        </a>
+    </div>
+
+    <!-- Список билетов -->
+    <div class="accordion border border-secondary rounded-3 overflow-hidden shadow-sm" id="ticketsAccordion">
+
+        <!-- Билет 1 -->
+        <div class="accordion-item bg-dark text-white border-bottom border-secondary">
+            <h2 class="accordion-header">
+                <button class="accordion-button bg-dark text-white fw-medium border-0 collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#ticket1">
+                    <span class="badge bg-secondary text-dark me-3 font-monospace">№ 1</span>
+                    Понятие предела функции в точке по Коши и по Гейне
+                </button>
+            </h2>
+            <div id="ticket1" class="accordion-collapse collapse" data-bs-parent="#ticketsAccordion">
+                <div class="accordion-body bg-dark text-light border-top border-secondary small">
+                    <p class="fw-bold text-success mb-2">Простыми словами:</p>
+                    <p class="mb-3">Предел функции — это число, к которому стремится значение функции <i>f(x)</i>, когда аргумент <i>x</i> подбирается сколь угодно близко к заданной точке <i>c</i>.</p>
+
+                    <p class="fw-bold text-success mb-2">Строгое определение по Коши (на языке эпсилон - дельта):</p>
+                    <p class="mb-3">Число <i>L</i> называется пределом функции, если для любого расстояния &epsilon; &gt; 0 найдется такое расстояние &delta; &gt; 0, что как только аргумент попадает в интервал:</p>
+                    <div class="bg-black p-3 rounded text-center mb-3 font-monospace">
+                        <span class="math-block math-highlight">0 &lt; |x - c| &lt; &delta;</span>
+                    </div>
+                    <p class="mb-3">значение самой функции гарантированно попадает в интервал:</p>
+                    <div class="bg-black p-3 rounded text-center mb-3 font-monospace">
+                        <span class="math-block math-highlight">|f(x) - L| &lt; &epsilon;</span>
+                    </div>
+
+                    <div class="mt-3">
+                        <a href="#" class="btn btn-sm btn-outline-success fw-bold">Перейти к конспекту лекции</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Билет 2 -->
+        <div class="accordion-item bg-dark text-white border-bottom border-secondary">
+            <h2 class="accordion-header">
+                <button class="accordion-button bg-dark text-white fw-medium border-0 collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#ticket2">
+                    <span class="badge bg-secondary text-dark me-3 font-monospace">№ 2</span>
+                    Теорема Ролля о нулю производной и её геометрический смысл
+                </button>
+            </h2>
+            <div id="ticket2" class="accordion-collapse collapse" data-bs-parent="#ticketsAccordion">
+                <div class="accordion-body bg-dark text-light border-top border-secondary small">
+                    <p class="fw-bold text-success mb-2">Суть теоремы:</p>
+                    <p class="mb-3">If график гладкой функции на концах отрезка находится на одинаковой высоте, то на нем обязательно найдется точка, где касательная будет полностью горизонтальной.</p>
+
+                    <p class="fw-bold text-success mb-2">Математическое условие:</p>
+                    <p class="mb-3">Если <i>f(a) = f(b)</i>, то на интервале существует точка <i>c</i>, в которой производная равна нулю:</p>
+                    <div class="bg-black p-3 rounded text-center mb-3 font-monospace">
+                        <span class="math-block math-highlight">f'(c) = 0</span>
+                    </div>
+                    <div class="mt-3">
+                        <a href="#" class="btn btn-sm btn-outline-success fw-bold">Перейти к конспекту лекции</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Билет 3 -->
+        <div class="accordion-item bg-dark text-white">
+            <h2 class="accordion-header">
+                <button class="accordion-button bg-dark text-white fw-medium border-0 collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#ticket3">
+                    <span class="badge bg-secondary text-dark me-3 font-monospace">№ 3</span>
+                    Замечательные пределы: первый и второй
+                </button>
+            </h2>
+            <div id="ticket3" class="accordion-collapse collapse show" data-bs-parent="#ticketsAccordion">
+                <div class="accordion-body bg-dark text-light border-top border-secondary small">
+                    <p class="fw-bold text-success mb-3">Базовые формулы в чистом виде:</p>
+
+                    <!-- Первый замечательный предел -->
+                    <div class="d-flex align-items-center justify-content-center bg-black p-3 rounded mb-3">
+                        <span class="text-white me-3 small">1) Первый предел:</span>
+                        <div class="math-block">
+                            <div class="math-limit">
+                                <span>lim</span>
+                                <span class="math-sub">x &rarr; 0</span>
+                            </div>
+                            <div class="math-fraction">
+                                <span class="math-numerator">sin x</span>
+                                <span class="math-denominator">x</span>
+                            </div>
+                            <span class="math-highlight class ms-2">= 1</span>
+                        </div>
+                    </div>
+
+                    <!-- Второй замечательный предел -->
+                    <div class="d-flex align-items-center justify-content-center bg-black p-3 rounded">
+                        <span class="text-white me-3 small">2) Второй предел:</span>
+                        <div class="math-block">
+                            <div class="math-limit">
+                                <span>lim</span>
+                                <span class="math-sub">x &rarr; &infin;</span>
+                            </div>
+                            <span class="text-white me-1">(1 +</span>
+                            <div class="math-fraction">
+                                <span class="math-numerator">1</span>
+                                <span class="math-denominator">x</span>
+                            </div>
+                            <span class="text-white">)<sup>x</sup></span>
+                            <span class="math-highlight ms-2">= e</span>
+                        </div>
+                    </div>
+
+                    <div class="mt-3">
+                        <a href="#" class="btn btn-sm btn-outline-success fw-bold">Перейти к конспекту лекции</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
 </div>
+
+<style>
+    .accordion-button::after {
+        filter: invert(1) grayscale(1) brightness(2);
+    }
+
+    .accordion-button:not(.collapsed) {
+        background-color: #252525 !important;
+        color: #39ff14 !important;
+        box-shadow: none !important;
+    }
+
+    .accordion-button:focus {
+        box-shadow: none !important;
+        border-color: rgba(57, 255, 20, 0.2) !important;
+    }
+</style>
 {% endblock %}
