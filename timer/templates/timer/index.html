@@ -3,9 +3,84 @@
 {% block title %}Таймер{% endblock %}
 
 {% block content %}
-<h1 class="h3 mb-3">Таймер</h1>
-<div class="alert alert-secondary">
-  Здесь будет помодоро-таймер 25/5 и статистика занятий.<br>
-  <small>Ответственный: участник «Т». Файл шаблона: <code>timer/templates/timer/index.html</code></small>
+<div class="container mt-4">
+    <h1 class="h3 mb-3">Таймер</h1>
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card bg-dark text-white text-center shadow-lg p-4 border-secondary">
+                <div class="card-body">
+                    <h2 id="timer-label" class="card-title text-muted mb-3 fs-4">Время работать!</h2>
+                    <div id="countdown" class="display-1 fw-bold my-4 text-success" style="font-family: monospace;">25:00</div>
+                    <div class="d-grid gap-2 d-md-block">
+                        <button id="start-btn" class="btn btn-success btn-lg px-4 me-md-2 fw-bold">Старт</button>
+                        <button id="reset-btn" class="btn btn-outline-secondary btn-lg px-4 text-white">Сброс</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+<script>
+    let timer = null;
+    let timeLeft = 25 * 60;
+    let isWorking = true;
+
+    const countdownDisplay = document.getElementById('countdown');
+    const startBtn = document.getElementById('start-btn');
+    const label = document.getElementById('timer-label');
+
+    function updateDisplay() {
+    let minutes = Math.floor(timeLeft / 60);
+    let seconds = timeLeft % 60;
+    countdownDisplay.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+    }
+
+    startBtn.addEventListener('click', () => {
+    if (timer) {
+    clearInterval(timer);
+    timer = null;
+    startBtn.textContent = 'Старт';
+    startBtn.className = 'btn btn-success btn-lg px-4 me-md-2 fw-bold';
+    } else {
+    startBtn.textContent = 'Пауза';
+    startBtn.className = 'btn btn-danger btn-lg px-4 me-md-2 fw-bold';
+    timer = setInterval(() => {
+    if (timeLeft > 0) {
+    timeLeft--;
+    updateDisplay();
+    } else {
+    clearInterval(timer);
+    timer = null;
+    isWorking = !isWorking;
+    timeLeft = isWorking ? 25 * 60 : 5 * 60;
+    label.textContent = isWorking ? "Время работать!" : "Время отдыхать!";
+
+    if (isWorking) {
+    countdownDisplay.className = "display-1 fw-bold my-4 text-success";
+    } else {
+    countdownDisplay.className = "display-1 fw-bold my-4 text-info";
+    }
+
+    startBtn.textContent = 'Старт';
+    startBtn.className = 'btn btn-success btn-lg px-4 me-md-2 fw-bold';
+    updateDisplay();
+    alert(isWorking ? "Пора за работу!" : "Перерыв 5 минут!");
+    }
+    }, 1000);
+    }
+    });
+
+    document.getElementById('reset-btn').addEventListener('click', () => {
+    clearInterval(timer);
+    timer = null;
+    isWorking = true;
+    timeLeft = 25 * 60;
+    label.textContent = "Время работать!";
+    countdownDisplay.className = "display-1 fw-bold my-4 text-success";
+    startBtn.textContent = 'Старт';
+    startBtn.className = 'btn btn-success btn-lg px-4 me-md-2 fw-bold';
+    updateDisplay();
+    });
+</script>
 {% endblock %}
