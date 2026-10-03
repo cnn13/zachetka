@@ -2,38 +2,83 @@
 <!doctype html>
 <html lang="ru">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{% block title %}Зачётка{% endblock %} · Зачётка</title>
-  <link href="{% static 'vendor/bootstrap/bootstrap.min.css' %}" rel="stylesheet">
-  <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Зачётка{% endblock %} · Зачётка</title>
+    <link href="{% static 'vendor/bootstrap/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    <style>
+        /* Мощная и чистая тёмная тема */
+        body {
+            background-color: #121212 !important;
+            color: #e0e0e0 !important;
+        }
+
+        /* Исправляем карточки: делаем их тёмно-серыми с контрастным белым текстом */
+        .card, .jumbotron, .alert, [class*="cardbg-"] {
+            background-color: #1e1e1e !important;
+            border: 1px solid #2d2d2d !important;
+            color: #ffffff !important;
+        }
+
+        /* Все заголовки в карточках делаем яркими и читаемыми */
+        h1, h2, h3, h4, h5, h6, .card-title, .navbar-brand {
+            color: #ffffff !important;
+        }
+
+        /* Обычный текст и описания в карточках делаем светло-серыми */
+        p, .card-text, .text-muted, small {
+            color: #b0b0b0 !important;
+        }
+
+        /* Фиксируем неоновый акцент для логотипа */
+        .navbar-brand.text-success {
+            color: #39ff14 !important;
+        }
+
+        /* Подсвечиваем ссылки в меню */
+        .navbar-dark .navbar-nav .nav-link {
+            color: #aaaaaa !important;
+        }
+
+            .navbar-dark .navbar-nav .nav-link:hover {
+                color: #39ff14 !important;
+            }
+    </style>
 </head>
-<body class="bg-light">
-  <nav class="navbar navbar-expand-md navbar-dark bg-primary mb-4">
-    <div class="container">
-      <a class="navbar-brand fw-bold" href="{% url 'home' %}">Зачётка</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu"
-              aria-controls="menu" aria-expanded="false" aria-label="Меню">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="menu">
-        <ul class="navbar-nav me-auto">
-          <li class="nav-item"><a class="nav-link" href="{% url 'materials:index' %}">Архив</a></li>
-          <li class="nav-item"><a class="nav-link" href="{% url 'tickets:index' %}">Билеты</a></li>
-          <li class="nav-item"><a class="nav-link" href="{% url 'timer:index' %}">Таймер</a></li>
-        </ul>
-        <ul class="navbar-nav">
-          <li class="nav-item"><a class="nav-link" href="{% url 'accounts:index' %}">Профиль</a></li>
-        </ul>
-      </div>
-    </div>
-  </nav>
+<body class="d-flex flex-column min-vh-100">
+    <!-- Верхнее меню -->
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark border-bottom border-secondary mb-4">
+        <div class="container">
+            <a class="navbar-brand fw-bold text-success" href="{% url 'home' %}">ЗАЧЁТКА</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu"
+                    aria-controls="menu" aria-expanded="false" aria-label="Меню">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="menu">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="{% url 'materials:index' %}">Архив</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'tickets:index' %}">Билеты</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'timer:index' %}">Таймер</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'accounts:index' %}">Профиль</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
 
-  <main class="container pb-5">
-    {% block content %}{% endblock %}
-  </main>
+    <!-- Контент страницы -->
+    <main class="container pb-5 flex-grow-1">
+        {% block content %}{% endblock %}
+    </main>
 
-  <script src="{% static 'vendor/bootstrap/bootstrap.bundle.min.js' %}"></script>
-  {% block scripts %}{% endblock %}
+    <!-- Подвал сайта -->
+    <footer class="bg-dark text-center py-3 border-top border-secondary mt-auto">
+        <div class="container">
+            <small class="text-muted">&copy; 2026 Проект "Зачётка" &bull; ТПУ Программная инженерия</small>
+        </div>
+    </footer>
+
+    <script src="{% static 'vendor/bootstrap/bootstrap.bundle.min.js' %}"></script>
+    {% block scripts %}{% endblock %}
 </body>
 </html>
