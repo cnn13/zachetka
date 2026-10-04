@@ -3,9 +3,23 @@
 {% block title %}Билеты{% endblock %}
 
 {% block content %}
-<h1 class="h3 mb-3">Билеты</h1>
-<div class="alert alert-secondary">
-  Здесь будут билеты: список по предмету, чек-лист готовности и случайный билет.<br>
-  <small>Ответственный: участник «Б». Файл шаблона: <code>tickets/templates/tickets/index.html</code></small>
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1 class="h3 mb-0">Билеты</h1>
+  <a class="btn btn-primary" href="{% url 'tickets:bulk_add' %}">Добавить билеты</a>
 </div>
+
+{% for subject in subjects %}
+  <div class="card mb-3">
+    <div class="card-header fw-bold">{{ subject.name }}</div>
+    <ul class="list-group list-group-flush">
+      {% for ticket in subject.tickets.all %}
+        <li class="list-group-item"><strong>{{ ticket.number }}.</strong> {{ ticket.text }}</li>
+      {% empty %}
+        <li class="list-group-item text-muted">Билетов пока нет.</li>
+      {% endfor %}
+    </ul>
+  </div>
+{% empty %}
+  <div class="alert alert-secondary">Предметов пока нет. Их добавляют в <a href="/admin/">админке</a>.</div>
+{% endfor %}
 {% endblock %}

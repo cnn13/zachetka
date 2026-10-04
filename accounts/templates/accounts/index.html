@@ -4,8 +4,17 @@
 
 {% block content %}
 <h1 class="h3 mb-3">Профиль</h1>
-<div class="alert alert-secondary">
-  Здесь будут регистрация, вход, профиль, рейтинг группы и ачивки.<br>
-  <small>Ответственный: участник «М». Файл шаблона: <code>accounts/templates/accounts/index.html</code></small>
-</div>
+{% if user.is_authenticated %}
+  <div class="card">
+    <div class="card-body">
+      <p class="mb-1"><strong>Логин:</strong> {{ user.username }}</p>
+      <p class="mb-0"><strong>Группа:</strong> {% if profile %}{{ profile.group }}{% else %}не указана{% endif %}</p>
+    </div>
+  </div>
+{% else %}
+  <div class="alert alert-secondary">
+    Чтобы загружать материалы и добавлять билеты, <a href="{% url 'accounts:login' %}">войдите</a>
+    или <a href="{% url 'accounts:register' %}">зарегистрируйтесь</a>.
+  </div>
+{% endif %}
 {% endblock %}

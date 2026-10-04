@@ -129,7 +129,7 @@ FILE_UPLOAD_MAX_MEMORY_SIZE = 20 * 1024 * 1024  # 20 МБ (НФТ-05)
 DATA_UPLOAD_MAX_MEMORY_SIZE = 20 * 1024 * 1024
 
 # Куда отправлять после входа и выхода
-LOGIN_URL = "login"
+LOGIN_URL = "accounts:login"
 LOGIN_REDIRECT_URL = "home"
 LOGOUT_REDIRECT_URL = "home"
 

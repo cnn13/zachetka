@@ -3,9 +3,36 @@
 {% block title %}Архив материалов{% endblock %}
 
 {% block content %}
-<h1 class="h3 mb-3">Архив материалов</h1>
-<div class="alert alert-secondary">
-  Здесь будет архив лекций и конспектов: загрузка, фильтры, кнопка «полезно».<br>
-  <small>Ответственный: участник «А». Файл шаблона: <code>materials/templates/materials/index.html</code></small>
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1 class="h3 mb-0">Архив материалов</h1>
+  {% if user.is_authenticated %}
+    <a class="btn btn-primary" href="{% url 'materials:upload' %}">Загрузить материал</a>
+  {% else %}
+    <a class="btn btn-outline-primary" href="{% url 'accounts:login' %}?next={% url 'materials:upload' %}">Войдите, чтобы загрузить</a>
+  {% endif %}
 </div>
+
+{% if materials %}
+  <div class="table-responsive bg-white rounded-3 shadow-sm">
+    <table class="table table-hover mb-0 align-middle">
+      <thead>
+        <tr><th>Название</th><th>Предмет</th><th>Преподаватель</th><th>Курс</th><th>Год</th><th>Теги</th></tr>
+      </thead>
+      <tbody>
+        {% for m in materials %}
+          <tr>
+            <td><a href="{{ m.file.url }}" target="_blank">{{ m.title }}</a></td>
+            <td>{{ m.subject }}</td>
+            <td>{{ m.teacher }}</td>
+            <td>{{ m.get_course_display }}</td>
+            <td>{{ m.year }}</td>
+            <td>{% for tag in m.tags.all %}<span class="badge text-bg-secondary me-1">{{ tag }}</span>{% endfor %}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% else %}
+  <div class="alert alert-secondary">Пока нет ни одного материала.</div>
+{% endif %}
 {% endblock %}
