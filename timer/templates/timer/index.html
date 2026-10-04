@@ -3,84 +3,88 @@
 {% block title %}Таймер{% endblock %}
 
 {% block content %}
-<div class="container mt-4">
-    <h1 class="h3 mb-3">Таймер</h1>
-    <div class="row justify-content-center">
-        <div class="col-md-8 col-lg-6">
-            <div class="card bg-dark text-white text-center shadow-lg p-4 border-secondary">
-                <div class="card-body">
-                    <h2 id="timer-label" class="card-title text-muted mb-3 fs-4">Время работать!</h2>
-                    <div id="countdown" class="display-1 fw-bold my-4 text-success" style="font-family: monospace;">25:00</div>
-                    <div class="d-grid gap-2 d-md-block">
-                        <button id="start-btn" class="btn btn-success btn-lg px-4 me-md-2 fw-bold">Старт</button>
-                        <button id="reset-btn" class="btn btn-outline-secondary btn-lg px-4 text-white">Сброс</button>
-                    </div>
-                </div>
+<div class="wrap">
+    <!-- Заголовок страницы и 4 крупные геометрические плитки справа -->
+    <div style="display:flex;flex-wrap:wrap;gap:24px;justify-content:space-between;align-items:center">
+        <h1 class="h1">Таймер</h1>
+        <div aria-hidden="true" style="display:flex;gap:8px">
+            <div style="position:relative;width:96px;height:96px;overflow:hidden;background:#C5D6A0"><div style="position:absolute;left:20%;top:20%;width:60%;height:60%;border-radius:50%;background:#F6C3B2"></div></div>
+            <div style="position:relative;width:96px;height:96px;overflow:hidden;background:#3F5A2A"><div style="position:absolute;left:20%;bottom:0;width:60%;height:75%;border-radius:999px 999px 0 0;background:#F3F6E8"></div></div>
+            <div style="position:relative;width:96px;height:96px;overflow:hidden;background:#F6C3B2"><div style="position:absolute;right:0;bottom:0;width:80%;height:80%;border-radius:100% 0 0 0;background:#3F5A2A"></div></div>
+            <div style="position:relative;width:96px;height:96px;overflow:hidden;background:#DCE7BE"><div style="position:absolute;left:10%;top:10%;width:80%;height:80%;border-radius:50%;background:#3F5A2A"></div><div style="position:absolute;left:35%;top:35%;width:30%;height:30%;border-radius:50%;background:#F6C3B2"></div></div>
+        </div>
+    </div>
+
+    <div style="display:flex;flex-wrap:wrap;gap:56px">
+        <!-- Левая колонка: Таймер, полоса прогресса и три кнопки -->
+        <div style="flex:1 1 440px;display:flex;flex-direction:column;gap:28px">
+            <span style="display:flex">
+                <button type="button" id="work-btn" class="st on">Работа 25 мин</button>
+                <button type="button" id="break-btn" class="st">Перерыв 5 мин</button>
+            </span>
+            <span id="countdown" class="serif" style="font-size:clamp(64px,9vw,120px);font-weight:700;line-height:.9;color:#26331A">25:00</span>
+
+            <!-- Полоса прогресса из оригинального макета -->
+            <div style="height:6px;background:#DCE7BE">
+                <div id="progress-bar" style="width:0%;height:100%;background:#3F5A2A;transition:width 1s linear;"></div>
+            </div>
+
+            <div style="display:flex;flex-wrap:wrap;gap:12px">
+                <button id="start-btn" class="btn">Старт</button>
+                <button id="pause-btn" class="btn ghost">Пауза</button>
+                <button id="reset-btn" class="btn ghost">Сброс</button>
+            </div>
+        </div>
+
+        <!-- Правая колонка: Статистика сессий -->
+        <div style="flex:1 1 320px;display:flex;flex-direction:column;gap:32px">
+            <div style="display:flex;border-top:1px solid #C9D6A9;border-bottom:1px solid #C9D6A9">
+                <div style="flex:1;padding:16px 0"><span class="lbl">Сегодня</span><p class="serif" style="font-size:32px;font-weight:700;color:#3F5A2A">1,5 ч</p></div>
+                <div style="flex:1;padding:16px 24px;border-left:1px solid #C9D6A9"><span class="lbl">За неделю</span><p class="serif" style="font-size:32px;font-weight:700">9 ч</p></div>
+            </div>
+            <div>
+                <h2 class="serif" style="font-size:22px;font-weight:700;margin-bottom:8px">Завершённые сессии</h2>
+                <div class="row" style="padding:14px 0"><span class="muted" style="width:56px">10:15</span><span style="flex:1">Математический анализ</span><span class="lbl">25 мин</span></div>
+                <div class="row" style="padding:14px 0"><span class="muted" style="width:56px">10:45</span><span style="flex:1">Математический анализ</span><span class="lbl">25 мин</span></div>
+                <div class="row last" style="padding:14px 0"><span class="muted" style="width:56px">12:00</span><span style="flex:1">История</span><span class="lbl">25 мин</span></div>
             </div>
         </div>
     </div>
 </div>
 
+<!-- JavaScript с поддержкой шкалы прогресса -->
 <script>
-    let timer = null;
-    let timeLeft = 25 * 60;
-    let isWorking = true;
+    let timer = null; let totalDuration = 25 * 60; let timeLeft = totalDuration; let isWork = true;
+    const display = document.getElementById('countdown'); const startBtn = document.getElementById('start-btn');
+    const pauseBtn = document.getElementById('pause-btn'); const bar = document.getElementById('progress-bar');
+    const wBtn = document.getElementById('work-btn'); const bBtn = document.getElementById('break-btn');
 
-    const countdownDisplay = document.getElementById('countdown');
-    const startBtn = document.getElementById('start-btn');
-    const label = document.getElementById('timer-label');
-
-    function updateDisplay() {
-    let minutes = Math.floor(timeLeft / 60);
-    let seconds = timeLeft % 60;
-    countdownDisplay.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+    function update() {
+    let m = Math.floor(timeLeft / 60); let s = timeLeft % 60;
+    display.textContent = `${m}:${s < 10 ? '0' : ''}${s}`;
+    let percentage = ((totalDuration - timeLeft) / totalDuration) * 100;
+    bar.style.width = `${percentage}%`;
     }
+
+    function setMode(w) {
+    clearInterval(timer); timer = null; isWork = w;
+    totalDuration = isWork ? 25 * 60 : 5 * 60; timeLeft = totalDuration;
+    update();
+    if(isWork){wBtn.classList.add('on');wBtn.disabled=false;bBtn.classList.remove('on')}else{bBtn.classList.add('on');wBtn.classList.remove('on')}
+    }
+
+    wBtn.addEventListener('click', () => setMode(true)); bBtn.addEventListener('click', () => setMode(false));
 
     startBtn.addEventListener('click', () => {
-    if (timer) {
-    clearInterval(timer);
-    timer = null;
-    startBtn.textContent = 'Старт';
-    startBtn.className = 'btn btn-success btn-lg px-4 me-md-2 fw-bold';
-    } else {
-    startBtn.textContent = 'Пауза';
-    startBtn.className = 'btn btn-danger btn-lg px-4 me-md-2 fw-bold';
+    if (!timer) {
     timer = setInterval(() => {
-    if (timeLeft > 0) {
-    timeLeft--;
-    updateDisplay();
-    } else {
-    clearInterval(timer);
-    timer = null;
-    isWorking = !isWorking;
-    timeLeft = isWorking ? 25 * 60 : 5 * 60;
-    label.textContent = isWorking ? "Время работать!" : "Время отдыхать!";
-
-    if (isWorking) {
-    countdownDisplay.className = "display-1 fw-bold my-4 text-success";
-    } else {
-    countdownDisplay.className = "display-1 fw-bold my-4 text-info";
-    }
-
-    startBtn.textContent = 'Старт';
-    startBtn.className = 'btn btn-success btn-lg px-4 me-md-2 fw-bold';
-    updateDisplay();
-    alert(isWorking ? "Пора за работу!" : "Перерыв 5 минут!");
-    }
+    if (timeLeft > 0) { timeLeft--; update(); }
+    else { clearInterval(timer); timer = null; alert(isWork ? "Время вышло!" : "Перерыв окончен!"); setMode(!isWork); }
     }, 1000);
     }
     });
 
-    document.getElementById('reset-btn').addEventListener('click', () => {
-    clearInterval(timer);
-    timer = null;
-    isWorking = true;
-    timeLeft = 25 * 60;
-    label.textContent = "Время работать!";
-    countdownDisplay.className = "display-1 fw-bold my-4 text-success";
-    startBtn.textContent = 'Старт';
-    startBtn.className = 'btn btn-success btn-lg px-4 me-md-2 fw-bold';
-    updateDisplay();
-    });
+    pauseBtn.addEventListener('click', () => { if (timer) { clearInterval(timer); timer = null; } });
+    document.getElementById('reset-btn').addEventListener('click', () => { clearInterval(timer); timer = null; timeLeft = totalDuration; update(); });
 </script>
 {% endblock %}

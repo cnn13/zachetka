@@ -3,92 +3,88 @@
 {% block title %}Архив материалов{% endblock %}
 
 {% block content %}
-<div class="container mt-4">
-    <!-- Заголовок и фильтры -->
-    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
-        <h1 class="h3 mb-0 text-white fw-bold">Архив материалов</h1>
-
-        <!-- Быстрые фильтры по предметам -->
-        <div class="btn-group font-monospace" role="group">
-            <button type="button" class="btn btn-outline-success active btn-sm">Все</button>
-            <button type="button" class="btn btn-outline-secondary btn-sm text-white">Матанализ</button>
-            <button type="button" class="btn btn-outline-secondary btn-sm text-white">C++</button>
-            <button type="button" class="btn btn-outline-secondary btn-sm text-white">Python</button>
-        </div>
+<div class="wrap">
+    <div class="top">
+        <div style="display:flex;flex-direction:column;gap:16px"><h1 class="h1">Архив</h1></div>
+        <a class="btn" href="#">+ Загрузить материал</a>
     </div>
 
-    <!-- Сетка материалов (Примеры лекций) -->
-    <div class="row g-4">
-        <!-- Карточка 1: Матанализ -->
-        <div class="col-md-6 col-lg-4">
-            <div class="card bg-dark text-white h-100 shadow-sm border border-secondary">
-                <div class="card-body d-flex flex-column">
-                    <div class="d-flex justify-content-between align-items-start mb-2">
-                        <span class="badge bg-secondary text-dark fw-bold">Матанализ</span>
-                        <small class="text-muted font-monospace">03.10.2026</small>
-                    </div>
-                    <h3 class="h5 card-title fw-bold">Лекция 1: Пределы и непрерывность</h3>
-                    <p class="card-text text-muted small flex-grow-1">Полный конспект первой лекции с разбором теорем и практическими примерами для подготовки к коллоквиуму.</p>
+    <div class="grid4">
+        <label><span class="lbl">Предмет</span><select><option>Все предметы</option><option>Математический анализ</option><option>C++</option><option>Python</option></select></label>
+        <label><span class="lbl">Преподаватель</span><select><option>Все преподаватели</option></select></label>
+        <label><span class="lbl">Курс</span><select><option>Все курсы</option></select></label>
+        <label><span class="lbl">Год</span><select><option>Все годы</option></select></label>
+    </div>
 
-                    <div class="d-flex gap-2 mt-3">
-                        <a href="#" class="btn btn-success btn-sm flex-grow-1 fw-bold">Просмотр</a>
-                        <a href="#" class="btn btn-outline-light btn-sm px-3" title="Скачать">
-                            <svg xmlns="http://w3.org" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
-                                <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v2.5a.5.5 0 0 1 1 0v-2.5a2 2 0 0 0-2-2H2a2 2 0 0 0-2 2z" />
-                                <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z" />
-                            </svg>
-                        </a>
-                    </div>
-                </div>
+    <div style="border-bottom:1px solid #C9D6A9">
+        <div class="row">
+            <span class="mark" style="width:56px;text-align:center;">PDF</span>
+            <div class="ttl">
+                <h3 class="serif" style="font-size:20px;font-weight:700;line-height:1.3">Лекция 1: Пределы и непрерывность</h3>
+                <p class="muted" style="font-size:14px;margin-top:4px">Математический анализ · Фамилия И. О. · 1 курс · 2026</p>
             </div>
+            <a class="btn ghost" href="#">Полезно · 0</a>
+            <span style="display:flex;gap:8px"><a class="btn ghost" href="#">Открыть</a><a class="btn" href="#">Скачать</a></span>
         </div>
 
-        <!-- Карточка 2: Язык C++ -->
-        <div class="col-md-6 col-lg-4">
-            <div class="card bg-dark text-white h-100 shadow-sm border border-secondary">
-                <div class="card-body d-flex flex-column">
-                    <div class="d-flex justify-content-between align-items-start mb-2">
-                        <span class="badge bg-success text-dark fw-bold">C++</span>
-                        <small class="text-muted font-monospace">01.10.2026</small>
-                    </div>
-                    <h3 class="h5 card-title fw-bold">Шпаргалка: Указатели и ссылки</h3>
-                    <p class="card-text text-muted small flex-grow-1">Краткий справочник по работе с памятью, разыменованию, передаче аргументов в функции и управлению указателями.</p>
-
-                    <div class="d-flex gap-2 mt-3">
-                        <a href="#" class="btn btn-success btn-sm flex-grow-1 fw-bold">Просмотр</a>
-                        <a href="#" class="btn btn-outline-light btn-sm px-3" title="Скачать">
-                            <svg xmlns="http://w3.org" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
-                                <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v2.5a.5.5 0 0 1 1 0v-2.5a2 2 0 0 0-2-2H2a2 2 0 0 0-2 2z" />
-                                <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z" />
-                            </svg>
-                        </a>
-                    </div>
-                </div>
+        <div class="row">
+            <span class="mark" style="width:56px;text-align:center;">PDF</span>
+            <div class="ttl">
+                <h3 class="serif" style="font-size:20px;font-weight:700;line-height:1.3">Шпаргалка: Указатели и ссылки</h3>
+                <p class="muted" style="font-size:14px;margin-top:4px">C++ · Фамилия И. О. · 1 курс · 2026</p>
             </div>
+            <a class="btn ghost" href="#">Полезно · 0</a>
+            <span style="display:flex;gap:8px"><a class="btn ghost" href="#">Открыть</a><a class="btn" href="#">Скачать</a></span>
         </div>
 
-        <!-- Карточка 3: Python -->
-        <div class="col-md-6 col-lg-4">
-            <div class="card bg-dark text-white h-100 shadow-sm border border-secondary">
-                <div class="card-body d-flex flex-column">
-                    <div class="d-flex justify-content-between align-items-start mb-2">
-                        <span class="badge bg-info text-dark fw-bold">Python</span>
-                        <small class="text-muted font-monospace">28.09.2026</small>
-                    </div>
-                    <h3 class="h5 card-title fw-bold">Лабораторная 1: ООП основы</h3>
-                    <p class="card-text text-muted small flex-grow-1">Шаблон проекта и требования к выполнению первой лабораторной работы по объектно-ориентированному программированию.</p>
-
-                    <div class="d-flex gap-2 mt-3">
-                        <a href="#" class="btn btn-success btn-sm flex-grow-1 fw-bold">Просмотр</a>
-                        <a href="#" class="btn btn-outline-light btn-sm px-3" title="Скачать">
-                            <svg xmlns="http://w3.org" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
-                                <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v2.5a.5.5 0 0 1 1 0v-2.5a2 2 0 0 0-2-2H2a2 2 0 0 0-2 2z" />
-                                <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z" />
-                            </svg>
-                        </a>
-                    </div>
-                </div>
+        <div class="row">
+            <span class="mark" style="width:56px;text-align:center;">ZIP</span>
+            <div class="ttl">
+                <h3 class="serif" style="font-size:20px;font-weight:700;line-height:1.3">Лабораторная 1: ООП основы</h3>
+                <p class="muted" style="font-size:14px;margin-top:4px">Python · Фамилия И. О. · 1 курс · 2026</p>
             </div>
+            <a class="btn ghost" href="#">Полезно · 0</a>
+            <span style="display:flex;gap:8px"><a class="btn ghost" href="#">Открыть</a><a class="btn" href="#">Скачать</a></span>
+        </div>
+
+        <div class="row">
+            <span class="mark" style="width:56px;text-align:center;">PDF</span>
+            <div class="ttl">
+                <h3 class="serif" style="font-size:20px;font-weight:700;line-height:1.3">Конспект лекций: пределы и производные</h3>
+                <p class="muted" style="font-size:14px;margin-top:4px">Математический анализ · Фамилия И. О. · 1 курс · 2025</p>
+            </div>
+            <a class="btn ghost" href="#">Полезно · 12</a>
+            <span style="display:flex;gap:8px"><a class="btn ghost" href="#">Открыть</a><a class="btn" href="#">Скачать</a></span>
+        </div>
+
+        <div class="row">
+            <span class="mark" style="width:56px;text-align:center;">JPG</span>
+            <div class="ttl">
+                <h3 class="serif" style="font-size:20px;font-weight:700;line-height:1.3">Фото доски: законы Ньютона</h3>
+                <p class="muted" style="font-size:14px;margin-top:4px">Физика · Фамилия И. О. · 1 курс · 2025</p>
+            </div>
+            <a class="btn ghost" href="#">Полезно · 8</a>
+            <span style="display:flex;gap:8px"><a class="btn ghost" href="#">Открыть</a><a class="btn" href="#">Скачать</a></span>
+        </div>
+
+        <div class="row">
+            <span class="mark" style="width:56px;text-align:center;background:#C5D6A0">DOCX</span>
+            <div class="ttl">
+                <h3 class="serif" style="font-size:20px;font-weight:700;line-height:1.3">Шпаргалка по истории Древнего мира</h3>
+                <p class="muted" style="font-size:14px;margin-top:4px">История · Фамилия И. О. · 1 курс · 2026</p>
+            </div>
+            <a class="btn ghost" href="#">Полезно · 5</a>
+            <span style="display:flex;gap:8px"><a class="btn ghost" href="#">Открыть</a><a class="btn" href="#">Скачать</a></span>
+        </div>
+
+        <div class="row">
+            <span class="mark" style="width:56px;text-align:center;">PNG</span>
+            <div class="ttl">
+                <h3 class="serif" style="font-size:20px;font-weight:700;line-height:1.3">Схема строения клетки</h3>
+                <p class="muted" style="font-size:14px;margin-top:4px">Биология · Фамилия И. О. · 1 курс · 2026</p>
+            </div>
+            <a class="btn ghost" href="#">Полезно · 3</a>
+            <span style="display:flex;gap:8px"><a class="btn ghost" href="#">Открыть</a><a class="btn" href="#">Скачать</a></span>
         </div>
     </div>
 </div>
