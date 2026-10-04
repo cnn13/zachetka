@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}Регистрация{% endblock %}
+
+{% block content %}
+<div class="mx-auto" style="max-width: 520px;">
+  <h1 class="h3 mb-3">Регистрация</h1>
+  {% if not has_groups %}
+    <div class="alert alert-warning">
+      Список групп пуст. Сначала добавьте группу в <a href="/admin/accounts/studygroup/add/">админке</a>.
+    </div>
+  {% endif %}
+  <form method="post" class="bg-white p-4 rounded-3 shadow-sm">
+    {% csrf_token %}
+    {% include "includes/form_fields.html" %}
+    <button class="btn btn-primary w-100" type="submit">Зарегистрироваться</button>
+  </form>
+  <p class="mt-3">Уже есть аккаунт? <a href="{% url 'accounts:login' %}">Войти</a></p>
+</div>
+{% endblock %}

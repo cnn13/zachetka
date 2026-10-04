@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}Добавить билеты{% endblock %}
+
+{% block content %}
+<h1 class="h3 mb-3">Добавить билеты</h1>
+{% if not has_subjects %}
+  <div class="alert alert-warning">Сначала создайте предмет в <a href="/admin/tickets/subject/add/">админке</a>.</div>
+{% endif %}
+<form method="post" class="bg-white p-4 rounded-3 shadow-sm">
+  {% csrf_token %}
+  {% include "includes/form_fields.html" %}
+  <button class="btn btn-primary" type="submit">Создать билеты</button>
+  <a class="btn btn-link" href="{% url 'tickets:index' %}">Отмена</a>
+</form>
+{% endblock %}

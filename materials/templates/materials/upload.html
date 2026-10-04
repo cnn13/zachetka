@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block title %}Загрузить материал{% endblock %}
+
+{% block content %}
+<h1 class="h3 mb-3">Загрузить материал</h1>
+<form method="post" enctype="multipart/form-data" class="bg-white p-4 rounded-3 shadow-sm">
+  {% csrf_token %}
+  {% include "includes/form_fields.html" %}
+  <button class="btn btn-primary" type="submit">Загрузить</button>
+  <a class="btn btn-link" href="{% url 'materials:index' %}">Отмена</a>
+</form>
+{% endblock %}

@@ -6,86 +6,26 @@
 <div class="wrap">
     <div class="top">
         <div style="display:flex;flex-direction:column;gap:16px"><h1 class="h1">Архив</h1></div>
-        <a class="btn" href="#">+ Загрузить материал</a>
-    </div>
-
-    <div class="grid4">
-        <label><span class="lbl">Предмет</span><select><option>Все предметы</option><option>Математический анализ</option><option>C++</option><option>Python</option></select></label>
-        <label><span class="lbl">Преподаватель</span><select><option>Все преподаватели</option></select></label>
-        <label><span class="lbl">Курс</span><select><option>Все курсы</option></select></label>
-        <label><span class="lbl">Год</span><select><option>Все годы</option></select></label>
+        {% if user.is_authenticated %}
+        <a class="btn" href="{% url 'materials:upload' %}">+ Загрузить материал</a>
+        {% else %}
+        <a class="btn ghost" href="{% url 'accounts:login' %}?next={% url 'materials:upload' %}">Войдите, чтобы загрузить</a>
+        {% endif %}
     </div>
 
     <div style="border-bottom:1px solid #C9D6A9">
+        {% for m in materials %}
         <div class="row">
-            <span class="mark" style="width:56px;text-align:center;">PDF</span>
+            <span class="mark" style="width:56px;text-align:center;">{{ m.file.name|slice:"-4:"|cut:"."|upper }}</span>
             <div class="ttl">
-                <h3 class="serif" style="font-size:20px;font-weight:700;line-height:1.3">Лекция 1: Пределы и непрерывность</h3>
-                <p class="muted" style="font-size:14px;margin-top:4px">Математический анализ · Фамилия И. О. · 1 курс · 2026</p>
+                <h3 class="serif" style="font-size:20px;font-weight:700;line-height:1.3">{{ m.title }}</h3>
+                <p class="muted" style="font-size:14px;margin-top:4px">{{ m.subject }} · {{ m.teacher }} · {{ m.get_course_display }} · {{ m.year }}{% for tag in m.tags.all %} · #{{ tag }}{% endfor %}</p>
             </div>
-            <a class="btn ghost" href="#">Полезно · 0</a>
-            <span style="display:flex;gap:8px"><a class="btn ghost" href="#">Открыть</a><a class="btn" href="#">Скачать</a></span>
+            <span style="display:flex;gap:8px"><a class="btn ghost" href="{{ m.file.url }}" target="_blank">Открыть</a><a class="btn" href="{{ m.file.url }}" download>Скачать</a></span>
         </div>
-
-        <div class="row">
-            <span class="mark" style="width:56px;text-align:center;">PDF</span>
-            <div class="ttl">
-                <h3 class="serif" style="font-size:20px;font-weight:700;line-height:1.3">Шпаргалка: Указатели и ссылки</h3>
-                <p class="muted" style="font-size:14px;margin-top:4px">C++ · Фамилия И. О. · 1 курс · 2026</p>
-            </div>
-            <a class="btn ghost" href="#">Полезно · 0</a>
-            <span style="display:flex;gap:8px"><a class="btn ghost" href="#">Открыть</a><a class="btn" href="#">Скачать</a></span>
-        </div>
-
-        <div class="row">
-            <span class="mark" style="width:56px;text-align:center;">ZIP</span>
-            <div class="ttl">
-                <h3 class="serif" style="font-size:20px;font-weight:700;line-height:1.3">Лабораторная 1: ООП основы</h3>
-                <p class="muted" style="font-size:14px;margin-top:4px">Python · Фамилия И. О. · 1 курс · 2026</p>
-            </div>
-            <a class="btn ghost" href="#">Полезно · 0</a>
-            <span style="display:flex;gap:8px"><a class="btn ghost" href="#">Открыть</a><a class="btn" href="#">Скачать</a></span>
-        </div>
-
-        <div class="row">
-            <span class="mark" style="width:56px;text-align:center;">PDF</span>
-            <div class="ttl">
-                <h3 class="serif" style="font-size:20px;font-weight:700;line-height:1.3">Конспект лекций: пределы и производные</h3>
-                <p class="muted" style="font-size:14px;margin-top:4px">Математический анализ · Фамилия И. О. · 1 курс · 2025</p>
-            </div>
-            <a class="btn ghost" href="#">Полезно · 12</a>
-            <span style="display:flex;gap:8px"><a class="btn ghost" href="#">Открыть</a><a class="btn" href="#">Скачать</a></span>
-        </div>
-
-        <div class="row">
-            <span class="mark" style="width:56px;text-align:center;">JPG</span>
-            <div class="ttl">
-                <h3 class="serif" style="font-size:20px;font-weight:700;line-height:1.3">Фото доски: законы Ньютона</h3>
-                <p class="muted" style="font-size:14px;margin-top:4px">Физика · Фамилия И. О. · 1 курс · 2025</p>
-            </div>
-            <a class="btn ghost" href="#">Полезно · 8</a>
-            <span style="display:flex;gap:8px"><a class="btn ghost" href="#">Открыть</a><a class="btn" href="#">Скачать</a></span>
-        </div>
-
-        <div class="row">
-            <span class="mark" style="width:56px;text-align:center;background:#C5D6A0">DOCX</span>
-            <div class="ttl">
-                <h3 class="serif" style="font-size:20px;font-weight:700;line-height:1.3">Шпаргалка по истории Древнего мира</h3>
-                <p class="muted" style="font-size:14px;margin-top:4px">История · Фамилия И. О. · 1 курс · 2026</p>
-            </div>
-            <a class="btn ghost" href="#">Полезно · 5</a>
-            <span style="display:flex;gap:8px"><a class="btn ghost" href="#">Открыть</a><a class="btn" href="#">Скачать</a></span>
-        </div>
-
-        <div class="row">
-            <span class="mark" style="width:56px;text-align:center;">PNG</span>
-            <div class="ttl">
-                <h3 class="serif" style="font-size:20px;font-weight:700;line-height:1.3">Схема строения клетки</h3>
-                <p class="muted" style="font-size:14px;margin-top:4px">Биология · Фамилия И. О. · 1 курс · 2026</p>
-            </div>
-            <a class="btn ghost" href="#">Полезно · 3</a>
-            <span style="display:flex;gap:8px"><a class="btn ghost" href="#">Открыть</a><a class="btn" href="#">Скачать</a></span>
-        </div>
+        {% empty %}
+        <p class="muted">Пока нет ни одного материала.</p>
+        {% endfor %}
     </div>
 </div>
 {% endblock %}

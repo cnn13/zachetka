@@ -6,4 +6,5 @@ app_name = "materials"
 
 urlpatterns = [
     path("", views.index, name="index"),
+    path("upload/", views.upload, name="upload"),
 ]
