@@ -3,9 +3,59 @@
 {% block title %}Архив материалов{% endblock %}
 
 {% block content %}
-<h1 class="h3 mb-3">Архив материалов</h1>
-<div class="alert alert-secondary">
-  Здесь будет архив лекций и конспектов: загрузка, фильтры, кнопка «полезно».<br>
-  <small>Ответственный: участник «А». Файл шаблона: <code>materials/templates/materials/index.html</code></small>
+<div class="wrap">
+    <div class="top">
+        <div style="display:flex;flex-direction:column;gap:16px"><h1 class="h1">Архив</h1></div>
+        <a class="btn" href="#">+ Загрузить материал</a>
+    </div>
+
+    <div class="grid4">
+        <label><span class="lbl">Предмет</span><select><option>Все предметы</option></select></label>
+        <label><span class="lbl">Преподаватель</span><select><option>Все преподаватели</option></select></label>
+        <label><span class="lbl">Курс</span><select><option>Все курсы</option></select></label>
+        <label><span class="lbl">Год</span><select><option>Все годы</option></select></label>
+    </div>
+
+    <div style="border-bottom:1px solid #C9D6A9">
+        <div class="row">
+            <span class="mark" style="width:56px;text-align:center;">PDF</span>
+            <div class="ttl">
+                <h3 class="serif" style="font-size:20px;font-weight:700;line-height:1.3">Конспект лекций: пределы и производные</h3>
+                <p class="muted" style="font-size:14px;margin-top:4px">Математический анализ · Фамилия И. О. · 1 курс · 2025</p>
+            </div>
+            <a class="btn ghost" href="#">Полезно · 12</a>
+            <span style="display:flex;gap:8px"><a class="btn ghost" href="#">Открыть</a><a class="btn" href="#">Скачать</a></span>
+        </div>
+
+        <div class="row">
+            <span class="mark" style="width:56px;text-align:center;">JPG</span>
+            <div class="ttl">
+                <h3 class="serif" style="font-size:20px;font-weight:700;line-height:1.3">Фото доски: законы Ньютона</h3>
+                <p class="muted" style="font-size:14px;margin-top:4px">Физика · Фамилия И. О. · 1 курс · 2025</p>
+            </div>
+            <a class="btn ghost" href="#">Полезно · 8</a>
+            <span style="display:flex;gap:8px"><a class="btn ghost" href="#">Открыть</a><a class="btn" href="#">Скачать</a></span>
+        </div>
+
+        <div class="row">
+            <span class="mark" style="width:56px;text-align:center;background:#C5D6A0">DOCX</span>
+            <div class="ttl">
+                <h3 class="serif" style="font-size:20px;font-weight:700;line-height:1.3">Шпаргалка по истории Древнего мира</h3>
+                <p class="muted" style="font-size:14px;margin-top:4px">История · Фамилия И. О. · 1 курс · 2026</p>
+            </div>
+            <a class="btn ghost" href="#">Полезно · 5</a>
+            <span style="display:flex;gap:8px"><a class="btn ghost" href="#">Открыть</a><a class="btn" href="#">Скачать</a></span>
+        </div>
+
+        <div class="row">
+            <span class="mark" style="width:56px;text-align:center;">PNG</span>
+            <div class="ttl">
+                <h3 class="serif" style="font-size:20px;font-weight:700;line-height:1.3">Схема строения клетки</h3>
+                <p class="muted" style="font-size:14px;margin-top:4px">Биология · Фамилия И. О. · 1 курс · 2026</p>
+            </div>
+            <a class="btn ghost" href="#">Полезно · 3</a>
+            <span style="display:flex;gap:8px"><a class="btn ghost" href="#">Открыть</a><a class="btn" href="#">Скачать</a></span>
+        </div>
+    </div>
 </div>
 {% endblock %}

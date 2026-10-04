@@ -3,9 +3,34 @@
 {% block title %}Билеты{% endblock %}
 
 {% block content %}
-<h1 class="h3 mb-3">Билеты</h1>
-<div class="alert alert-secondary">
-  Здесь будут билеты: список по предмету, чек-лист готовности и случайный билет.<br>
-  <small>Ответственный: участник «Б». Файл шаблона: <code>tickets/templates/tickets/index.html</code></small>
+<div class="wrap">
+    <div class="top">
+        <div style="display:flex;flex-direction:column;gap:16px"><h1 class="h1">Билеты</h1></div>
+        <div style="display:flex;flex-wrap:wrap;gap:16px;align-items:flex-end">
+            <label style="min-width:260px"><span class="lbl">Предмет</span><select><option>Математический анализ</option></select></label>
+            <a class="btn" href="#">Случайный билет</a>
+        </div>
+    </div>
+
+    <div style="display:flex;flex-wrap:wrap;gap:24px 48px;align-items:center">
+        <span class="serif" style="font-size:clamp(56px,7vw,80px);font-weight:700;line-height:.9;color:#3F5A2A">62%</span>
+        <div style="flex:1 1 300px;display:flex;flex-direction:column;gap:10px">
+            <span class="lbl">Готовность по предмету</span>
+            <div style="height:6px;background:#DCE7BE"><div style="width:62%;height:100%;background:#3F5A2A"></div></div>
+        </div>
+    </div>
+
+    <div style="border-bottom:1px solid #C9D6A9">
+        <div class="row"><span class="lbl" style="width:32px">01</span><span class="serif ttl" style="font-size:18px;font-weight:600;line-height:1.3">Определение предела последовательности</span><span style="display:flex"><button type="button" class="st">Не знаю</button><button type="button" class="st">Плохо</button><button type="button" class="st on">Выучил</button></span></div>
+        <div class="row"><span class="lbl" style="width:32px">02</span><span class="serif ttl" style="font-size:18px;font-weight:600;line-height:1.3">Теорема о пределе монотонной последовательности</span><span style="display:flex"><button type="button" class="st">Не знаю</button><button type="button" class="st on">Плохо</button><button type="button" class="st">Выучил</button></span></div>
+        <div class="row"><span class="lbl" style="width:32px">03</span><span class="serif ttl" style="font-size:18px;font-weight:600;line-height:1.3">Производная сложной функции</span><span style="display:flex"><button type="button" class="st on">Не знаю</button><button type="button" class="st">Плохо</button><button type="button" class="st">Выучил</button></span></div>
+        <div class="row"><span class="lbl" style="width:32px">04</span><span class="serif ttl" style="font-size:18px;font-weight:600;line-height:1.3">Формула Тейлора</span><span style="display:flex"><button type="button" class="st on">Не знаю</button><button type="button" class="st">Плохо</button><button type="button" class="st">Выучил</button></span></div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:16px;max-width:640px">
+        <h2 class="serif" style="font-size:24px;font-weight:700">Добавить билеты</h2>
+        <label><span class="lbl">Один билет в строке</span><textarea rows="4"></textarea></label>
+        <a class="btn" style="width:fit-content" href="#">Сохранить список</a>
+    </div>
 </div>
 {% endblock %}
