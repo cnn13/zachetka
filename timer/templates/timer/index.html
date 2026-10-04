@@ -3,9 +3,141 @@
 {% block title %}Таймер{% endblock %}
 
 {% block content %}
-<h1 class="h3 mb-3">Таймер</h1>
-<div class="alert alert-secondary">
-  Здесь будет помодоро-таймер 25/5 и статистика занятий.<br>
-  <small>Ответственный: участник «Т». Файл шаблона: <code>timer/templates/timer/index.html</code></small>
+<div class="wrap">
+
+    <!-- Заголовок страницы -->
+    <div class="top">
+        <h1 class="h1">Таймер</h1>
+    </div>
+
+    <!-- Основная рабочая сетка таймера из макета -->
+    <div style="display:flex; flex-wrap:wrap; gap:40px; align-items:flex-start;">
+
+        <!-- Левая часть: Интерфейс отсчета времени -->
+        <div style="flex:1 1 400px; display:flex; flex-direction:column; gap:24px;">
+            <!-- Переключатель режимов -->
+            <div style="display:flex;">
+                <button type="button" id="work-mode-btn" class="st on" style="flex:1; justify-content:center; text-transform:uppercase; font-weight:600; font-size:12px; letter-spacing:.05em;">Работа 25 мин</button>
+                <button type="button" id="break-mode-btn" class="st" style="flex:1; justify-content:center; text-transform:uppercase; font-weight:600; font-size:12px; letter-spacing:.05em;">Перерыв 5 мин</button>
+            </div>
+
+            <!-- Крупный цифровой циферблат -->
+            <div id="countdown" class="serif" style="font-size:120px; font-weight:800; line-height:1; color:#26331A; text-align:center; padding:40px 0; border-top:1px solid #C9D6A9; border-bottom:1px solid #C9D6A9; font-variant-numeric: tabular-nums;">
+                25:00
+            </div>
+
+            <!-- Управляющие кнопки -->
+            <div style="display:flex; gap:12px;">
+                <button id="start-btn" class="btn" style="flex:1;">Старт</button>
+                <button id="reset-btn" class="btn ghost" style="flex:1;">Сброс</button>
+            </div>
+        </div>
+
+        <!-- Правая часть: Статистика и история сессий -->
+        <div style="flex:1 1 400px; display:flex; flex-direction:column; gap:32px;">
+            <!-- Блок мини-статистики -->
+            <div style="display:flex; border-top:1px solid #C9D6A9; border-bottom:1px solid #C9D6A9;">
+                <div style="flex:1; padding:16px 0; display:flex; flex-direction:column; gap:4px;">
+                    <span class="lbl">Сегодня</span>
+                    <span class="serif" style="font-size:24px; font-weight:700">1,5 ч</span>
+                </div>
+                <div style="flex:1; padding:16px 24px; border-left:1px solid #C9D6A9; display:flex; flex-direction:column; gap:4px;">
+                    <span class="lbl">За неделю</span>
+                    <span class="serif" style="font-size:24px; font-weight:700">9 ч</span>
+                </div>
+            </div>
+
+            <!-- Список завершенных сессий из Figma -->
+            <div>
+                <h2 class="serif" style="font-size:20px; font-weight:700; color:#3F5A2A; margin-bottom:16px;">Завершённые сессии</h2>
+                <div style="display:flex; flex-direction:column;">
+                    <div class="row" style="padding:16px 0;">
+                        <span class="lbl" style="width:60px; color:#8C968E;">10:15</span>
+                        <span class="ttl serif" style="font-size:16px; font-weight:600;">Математический анализ</span>
+                        <span class="muted font-monospace" style="font-size:13px;">25 мин</span>
+                    </div>
+                    <div class="row" style="padding:16px 0;">
+                        <span class="lbl" style="width:60px; color:#8C968E;">10:45</span>
+                        <span class="ttl serif" style="font-size:16px; font-weight:600;">Математический анализ</span>
+                        <span class="muted font-monospace" style="font-size:13px;">25 мин</span>
+                    </div>
+                    <div class="row last" style="padding:16px 0;">
+                        <span class="lbl" style="width:60px; color:#8C968E;">12:00</span>
+                        <span class="ttl serif" style="font-size:16px; font-weight:600;">История</span>
+                        <span class="muted font-monospace" style="font-size:13px;">25 мин</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
 </div>
+
+<!-- JavaScript логика твоего таймера -->
+<script>
+    let timer = null;
+    let timeLeft = 25 * 60;
+    let isWorkingMode = true;
+
+    const countdownDisplay = document.getElementById('countdown');
+    const startBtn = document.getElementById('start-btn');
+    const workBtn = document.getElementById('work-mode-btn');
+    const breakBtn = document.getElementById('break-mode-btn');
+
+    function updateDisplay() {
+    let minutes = Math.floor(timeLeft / 60);
+    let seconds = timeLeft % 60;
+    countdownDisplay.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+    }
+
+    function setMode(isWork) {
+    clearInterval(timer);
+    timer = null;
+    startBtn.textContent = 'Старт';
+    isWorkingMode = isWork;
+    timeLeft = isWorkingMode ? 25 * 60 : 5 * 60;
+    updateDisplay();
+
+    if (isWorkingMode) {
+    workBtn.classList.add('on');
+    breakBtn.classList.remove('on');
+    } else {
+    breakBtn.classList.add('on');
+    workBtn.classList.remove('on');
+    }
+    }
+
+    workBtn.addEventListener('click', () => setMode(true));
+    breakBtn.addEventListener('click', () => setMode(false));
+
+    startBtn.addEventListener('click', () => {
+    if (timer) {
+    clearInterval(timer);
+    timer = null;
+    startBtn.textContent = 'Старт';
+    } else {
+    startBtn.textContent = 'Пауза';
+    timer = setInterval(() => {
+    if (timeLeft > 0) {
+    timeLeft--;
+    updateDisplay();
+    } else {
+    clearInterval(timer);
+    timer = null;
+    startBtn.textContent = 'Старт';
+    alert(isWorkingMode ? "Время работы вышло! Сделайте перерыв." : "Перерыв окончен! Пора за работу.");
+    setMode(!isWorkingMode);
+    }
+    }, 1000);
+    }
+    });
+
+    document.getElementById('reset-btn').addEventListener('click', () => {
+    clearInterval(timer);
+    timer = null;
+    timeLeft = isWorkingMode ? 25 * 60 : 5 * 60;
+    startBtn.textContent = 'Старт';
+    updateDisplay();
+    });
+</script>
 {% endblock %}

@@ -3,9 +3,81 @@
 {% block title %}Архив материалов{% endblock %}
 
 {% block content %}
-<h1 class="h3 mb-3">Архив материалов</h1>
-<div class="alert alert-secondary">
-  Здесь будет архив лекций и конспектов: загрузка, фильтры, кнопка «полезно».<br>
-  <small>Ответственный: участник «А». Файл шаблона: <code>materials/templates/materials/index.html</code></small>
+<div class="wrap">
+
+    <!-- Заголовок и кнопка загрузки -->
+    <div class="top">
+        <h1 class="h1">Архив</h1>
+        <button class="btn">+ Загрузить материал</button>
+    </div>
+
+    <!-- Оригинальная панель фильтров дизайнера на чистых линиях -->
+    <div class="grid4">
+        <label><span class="lbl">Предмет</span><select><option>Все предметы</option></select></label>
+        <label><span class="lbl">Преподаватель</span><select><option>Все преподаватели</option></select></label>
+        <label><span class="lbl">Курс</span><select><option>Все курсы</option></select></label>
+        <label><span class="lbl">Год</span><select><option>Все годы</option></select></label>
+    </div>
+
+    <!-- Чистый список материалов из Figma -->
+    <div style="display:flex;flex-direction:column">
+
+        <!-- Строка 1: PDF -->
+        <div class="row">
+            <span class="mark" style="background:#F6C3B2">PDF</span>
+            <div class="ttl">
+                <h3 class="serif" style="font-size:18px;font-weight:700;margin-bottom:4px">Конспект лекций: пределы и производные</h3>
+                <span class="muted" style="font-size:13px font-family:sans-serif">Математический анализ &bull; Фамилия И. О. &bull; 1 курс &bull; 2025</span>
+            </div>
+            <div style="display:flex;gap:12px;flex-wrap:wrap">
+                <span class="st">Полезно &bull; 12</span>
+                <a class="btn ghost" href="#">Открыть</a>
+                <a class="btn" href="#">Скачать</a>
+            </div>
+        </div>
+
+        <!-- Строка 2: JPG -->
+        <div class="row">
+            <span class="mark" style="background:#F6C3B2">JPG</span>
+            <div class="ttl">
+                <h3 class="serif" style="font-size:18px;font-weight:700;margin-bottom:4px">Фото доски: законы Ньютона</h3>
+                <span class="muted" style="font-size:13px font-family:sans-serif">Физика &bull; Фамилия И. О. &bull; 1 курс &bull; 2025</span>
+            </div>
+            <div style="display:flex;gap:12px;flex-wrap:wrap">
+                <span class="st">Полезно &bull; 8</span>
+                <a class="btn ghost" href="#">Открыть</a>
+                <a class="btn" href="#">Скачать</a>
+            </div>
+        </div>
+
+        <!-- Строка 3: DOCX -->
+        <div class="row">
+            <span class="mark" style="background:#C9D6A9">DOCX</span>
+            <div class="ttl">
+                <h3 class="serif" style="font-size:18px;font-weight:700;margin-bottom:4px">Шпаргалка по истории Древнего мира</h3>
+                <span class="muted" style="font-size:13px font-family:sans-serif">История &bull; Фамилия И. О. &bull; 1 курс &bull; 2026</span>
+            </div>
+            <div style="display:flex;gap:12px;flex-wrap:wrap">
+                <span class="st">Полезно &bull; 5</span>
+                <a class="btn ghost" href="#">Открыть</a>
+                <a class="btn" href="#">Скачать</a>
+            </div>
+        </div>
+
+        <!-- Строка 4: PNG -->
+        <div class="row last">
+            <span class="mark" style="background:#C9D6A9">PNG</span>
+            <div class="ttl">
+                <h3 class="serif" style="font-size:18px;font-weight:700;margin-bottom:4px">Схема строения клетки</h3>
+                <span class="muted" style="font-size:13px font-family:sans-serif">Биология &bull; Фамилия И. О. &bull; 1 курс &bull; 2026</span>
+            </div>
+            <div style="display:flex;gap:12px;flex-wrap:wrap">
+                <span class="st">Полезно &bull; 3</span>
+                <a class="btn ghost" href="#">Открыть</a>
+                <a class="btn" href="#">Скачать</a>
+            </div>
+        </div>
+
+    </div>
 </div>
 {% endblock %}

@@ -3,9 +3,94 @@
 {% block title %}Билеты{% endblock %}
 
 {% block content %}
-<h1 class="h3 mb-3">Билеты</h1>
-<div class="alert alert-secondary">
-  Здесь будут билеты: список по предмету, чек-лист готовности и случайный билет.<br>
-  <small>Ответственный: участник «Б». Файл шаблона: <code>tickets/templates/tickets/index.html</code></small>
+<div class="wrap">
+
+    <!-- Заголовок и кнопка случайного билета без эмодзи -->
+    <div class="top">
+        <div>
+            <h1 class="h1">Билеты</h1>
+            <div class="muted font-monospace small" style="margin-top: 4px;">Предмет: <span class="fw-bold" style="color: #26331A;">Математический анализ</span></div>
+        </div>
+        <a href="#" class="btn">Случайный билет</a>
+    </div>
+
+    <!-- Прогресс-бар готовности -->
+    <div style="border-top: 1px solid #C9D6A9; border-bottom: 1px solid #C9D6A9; padding: 24px 0;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;" class="font-monospace">
+            <span class="serif" style="font-size: 28px; font-weight: 800; color: #3F5A2A;">62%</span>
+            <span class="lbl">Готовность по предмету</span>
+        </div>
+        <div style="height: 6px; background: #C9D6A9; width: 100%; position: relative;">
+            <div style="height: 100%; background: #3F5A2A; width: 62%;"></div>
+        </div>
+    </div>
+
+    <!-- Чек-лист билетов с чистыми однотонными кнопками из Figma -->
+    <div style="display:flex; flex-direction:column">
+
+        <!-- Билет 1 -->
+        <div class="row">
+            <span class="lbl" style="width:48px">01</span>
+            <div class="ttl">
+                <h3 class="serif" style="font-size:16px; font-weight:600;">Определение предела последовательности</h3>
+            </div>
+            <div style="display:flex; gap:12px; flex-wrap:wrap">
+                <button type="button" class="st">Не знаю</button>
+                <button type="button" class="st">Плохо</button>
+                <button type="button" class="st on">Выучил</button>
+            </div>
+        </div>
+
+        <!-- Билет 2 -->
+        <div class="row">
+            <span class="lbl" style="width:48px">02</span>
+            <div class="ttl">
+                <h3 class="serif" style="font-size:16px; font-weight:600;">Теорема о пределе монотонной последовательности</h3>
+            </div>
+            <div style="display:flex; gap:12px; flex-wrap:wrap">
+                <button type="button" class="st">Не знаю</button>
+                <button type="button" class="st">Плохо</button>
+                <button type="button" class="st">Выучил</button>
+            </div>
+        </div>
+
+        <!-- Билет 3 -->
+        <div class="row">
+            <span class="lbl" style="width:48px">03</span>
+            <div class="ttl">
+                <h3 class="serif" style="font-size:16px; font-weight:600;">Производная сложной функции</h3>
+            </div>
+            <div style="display:flex; gap:12px; flex-wrap:wrap">
+                <button type="button" class="st">Не знаю</button>
+                <button type="button" class="st">Плохо</button>
+                <button type="button" class="st">Выучил</button>
+            </div>
+        </div>
+
+        <!-- Билет 4 -->
+        <div class="row last">
+            <span class="lbl" style="width:48px">04</span>
+            <div class="ttl">
+                <h3 class="serif" style="font-size:16px; font-weight:600;">Формула Тейлора</h3>
+            </div>
+            <div style="display:flex; gap:12px; flex-wrap:wrap">
+                <button type="button" class="st">Не знаю</button>
+                <button type="button" class="st">Плохо</button>
+                <button type="button" class="st">Выучил</button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Форма добавления билетов -->
+    <div style="margin-top: 24px; display: flex; flex-direction: column; gap: 16px; max-width: 600px;">
+        <h2 class="serif" style="font-size: 22px; font-weight: 700; color: #3F5A2A;">Добавить билеты</h2>
+        <label>
+            <span class="lbl" style="margin-bottom: 8px;">Один билет в строке</span>
+            <textarea rows="4" placeholder="Введите вопросы к экзамену..."></textarea>
+        </label>
+        <button type="button" class="btn" style="width: fit-content;">Сохранить список</button>
+    </div>
+
 </div>
 {% endblock %}
