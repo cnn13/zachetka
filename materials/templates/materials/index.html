@@ -3,36 +3,29 @@
 {% block title %}Архив материалов{% endblock %}
 
 {% block content %}
-<div class="d-flex justify-content-between align-items-center mb-3">
-  <h1 class="h3 mb-0">Архив материалов</h1>
-  {% if user.is_authenticated %}
-    <a class="btn btn-primary" href="{% url 'materials:upload' %}">Загрузить материал</a>
-  {% else %}
-    <a class="btn btn-outline-primary" href="{% url 'accounts:login' %}?next={% url 'materials:upload' %}">Войдите, чтобы загрузить</a>
-  {% endif %}
-</div>
+<div class="wrap">
+    <div class="top">
+        <div style="display:flex;flex-direction:column;gap:16px"><h1 class="h1">Архив</h1></div>
+        {% if user.is_authenticated %}
+        <a class="btn" href="{% url 'materials:upload' %}">+ Загрузить материал</a>
+        {% else %}
+        <a class="btn ghost" href="{% url 'accounts:login' %}?next={% url 'materials:upload' %}">Войдите, чтобы загрузить</a>
+        {% endif %}
+    </div>
 
-{% if materials %}
-  <div class="table-responsive bg-white rounded-3 shadow-sm">
-    <table class="table table-hover mb-0 align-middle">
-      <thead>
-        <tr><th>Название</th><th>Предмет</th><th>Преподаватель</th><th>Курс</th><th>Год</th><th>Теги</th></tr>
-      </thead>
-      <tbody>
+    <div style="border-bottom:1px solid #C9D6A9">
         {% for m in materials %}
-          <tr>
-            <td><a href="{{ m.file.url }}" target="_blank">{{ m.title }}</a></td>
-            <td>{{ m.subject }}</td>
-            <td>{{ m.teacher }}</td>
-            <td>{{ m.get_course_display }}</td>
-            <td>{{ m.year }}</td>
-            <td>{% for tag in m.tags.all %}<span class="badge text-bg-secondary me-1">{{ tag }}</span>{% endfor %}</td>
-          </tr>
+        <div class="row">
+            <span class="mark" style="width:56px;text-align:center;">{{ m.file.name|slice:"-4:"|cut:"."|upper }}</span>
+            <div class="ttl">
+                <h3 class="serif" style="font-size:20px;font-weight:700;line-height:1.3">{{ m.title }}</h3>
+                <p class="muted" style="font-size:14px;margin-top:4px">{{ m.subject }} · {{ m.teacher }} · {{ m.get_course_display }} · {{ m.year }}{% for tag in m.tags.all %} · #{{ tag }}{% endfor %}</p>
+            </div>
+            <span style="display:flex;gap:8px"><a class="btn ghost" href="{{ m.file.url }}" target="_blank">Открыть</a><a class="btn" href="{{ m.file.url }}" download>Скачать</a></span>
+        </div>
+        {% empty %}
+        <p class="muted">Пока нет ни одного материала.</p>
         {% endfor %}
-      </tbody>
-    </table>
-  </div>
-{% else %}
-  <div class="alert alert-secondary">Пока нет ни одного материала.</div>
-{% endif %}
+    </div>
+</div>
 {% endblock %}
