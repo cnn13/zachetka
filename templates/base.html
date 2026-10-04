@@ -4,27 +4,27 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{% block title %}Зачётка{% endblock %} · Зачётка</title>
+    <title>{% block title %}Зачётка — макеты{% endblock %}</title>
     <link href="https://googleapis.com" rel="stylesheet">
     <style>
         body {
             margin: 0;
-            font-family: 'Manrope', system-ui, sans-serif;
+            font-family: 'Manrope',system-ui,sans-serif;
             background: #F3F6E8;
             color: #26331A;
-            line-height: 1.5;
+            line-height: 1.5
         }
 
         a {
-            color: #3F5A2A;
+            color: #3F5A2A
         }
 
         h1, h2, h3, p {
-            margin: 0;
+            margin: 0
         }
 
         .serif {
-            font-family: 'Manrope', system-ui, sans-serif;
+            font-family: 'Manrope',system-ui,sans-serif
         }
 
         .nav {
@@ -36,7 +36,7 @@
             border-bottom: 1px solid #C9D6A9;
             font-size: 12px;
             letter-spacing: .12em;
-            text-transform: uppercase;
+            text-transform: uppercase
         }
 
             .nav a {
@@ -44,16 +44,22 @@
                 text-decoration: none;
                 min-height: 44px;
                 display: inline-flex;
-                align-items: center;
+                align-items: center
             }
+
+                .nav a.on {
+                    color: #3F5A2A;
+                    text-decoration: underline
+                }
 
                 .nav a.brand {
                     margin-right: auto;
+                    font-family: 'Manrope',system-ui,sans-serif;
                     font-size: 22px;
                     font-weight: 700;
                     text-transform: none;
                     letter-spacing: 0;
-                    color: #3F5A2A;
+                    color: #3F5A2A
                 }
 
         .wrap {
@@ -62,18 +68,18 @@
             padding: 56px 40px 96px;
             display: flex;
             flex-direction: column;
-            gap: 56px;
+            gap: 56px
         }
 
         .lbl {
             font-size: 12px;
             letter-spacing: .12em;
             text-transform: uppercase;
-            color: #5F7345;
+            color: #5F7345
         }
 
         .muted {
-            color: #5F7345;
+            color: #5F7345
         }
 
         .mark {
@@ -85,7 +91,7 @@
             font-size: 12px;
             letter-spacing: .06em;
             text-transform: uppercase;
-            font-weight: 600;
+            font-weight: 600
         }
 
         .btn {
@@ -103,13 +109,13 @@
             text-transform: uppercase;
             text-decoration: none;
             border: 1px solid #3F5A2A;
-            cursor: pointer;
+            cursor: pointer
         }
 
             .btn.ghost {
                 background: transparent;
                 color: #26331A;
-                border-color: #3F5A2A;
+                border-color: #3F5A2A
             }
 
         .st {
@@ -121,16 +127,18 @@
             color: #26331A;
             text-decoration: none;
             font-size: 14px;
+            background: transparent;
+            cursor: pointer
         }
 
             .st + .st {
-                margin-left: -1px;
+                margin-left: -1px
             }
 
             .st.on {
                 background: #3F5A2A;
                 color: #F3F6E8;
-                border-color: #3F5A2A;
+                border-color: #3F5A2A
             }
 
         select, textarea {
@@ -143,22 +151,22 @@
             font: inherit;
             width: 100%;
             box-sizing: border-box;
-            padding: 0;
+            padding: 0 12px
         }
 
         textarea {
             border: 1px solid #9CB07A;
-            padding: 12px;
+            padding: 12px
         }
 
         select option {
-            background: #F3F6E8;
+            background: #F3F6E8
         }
 
         label {
             display: flex;
             flex-direction: column;
-            gap: 4px;
+            gap: 4px
         }
 
         .row {
@@ -169,25 +177,25 @@
             padding: 24px 0;
             border-top: 1px solid #C9D6A9;
             text-decoration: none;
-            color: #26331A;
+            color: #26331A
         }
 
             .row.last {
-                border-bottom: 1px solid #C9D6A9;
+                border-bottom: 1px solid #C9D6A9
             }
 
             .row .ttl {
-                flex: 1 1 300px;
+                flex: 1 1 300px
             }
 
         a.row:hover .ttl {
-            color: #3F5A2A;
+            color: #3F5A2A
         }
 
         .grid4 {
             display: grid;
             gap: 24px;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit,minmax(200px,1fr))
         }
 
         .top {
@@ -195,16 +203,16 @@
             flex-wrap: wrap;
             gap: 24px;
             justify-content: space-between;
-            align-items: flex-end;
+            align-items: flex-end
         }
 
         .h1 {
-            font-family: 'Manrope', system-ui, sans-serif;
+            font-family: 'Manrope',system-ui,sans-serif;
             letter-spacing: -.02em;
             font-weight: 800;
-            font-size: clamp(32px, 4.5vw, 52px);
+            font-size: clamp(32px,4.5vw,52px);
             line-height: .95;
-            color: #3F5A2A;
+            color: #3F5A2A
         }
 
         .foot {
@@ -216,7 +224,7 @@
             gap: 0 32px;
             font-size: 13px;
             color: #5F7345;
-            margin-top: auto;
+            margin-top: auto
         }
 
             .foot a {
@@ -224,38 +232,39 @@
                 text-decoration: none;
                 min-height: 44px;
                 display: inline-flex;
-                align-items: center;
+                align-items: center
             }
 
                 .foot a.brand {
                     margin-right: auto;
                     font-weight: 800;
                     font-size: 18px;
-                    color: #3F5A2A;
+                    color: #3F5A2A
                 }
     </style>
 </head>
 <body class="d-flex flex-column min-vh-100">
 
+    <!-- ВЕРХНЕЕ МЕНЮ: С умным выделением текущей страницы -->
     <nav class="nav" aria-label="Главное меню">
         <a class="brand" href="{% url 'home' %}">Зачётка</a>
-        <a href="{% url 'materials:index' %}">Архив</a>
-        <a href="{% url 'tickets:index' %}">Билеты</a>
-        <a href="{% url 'timer:index' %}">Таймер</a>
-        <a href="{% url 'accounts:index' %}">Профиль</a>
+        <a href="{% url 'materials:index' %}" class="{% if request.resolver_match.app_name == 'materials' %}on{% endif %}">Архив</a>
+        <a href="{% url 'tickets:index' %}" class="{% if request.resolver_match.app_name == 'tickets' %}on{% endif %}">Билеты</a>
+        <a href="{% url 'timer:index' %}" class="{% if request.resolver_match.app_name == 'timer' %}on{% endif %}">Таймер</a>
+        <a href="{% url 'accounts:index' %}" class="{% if request.resolver_match.app_name == 'accounts' %}on{% endif %}">Профиль</a>
     </nav>
 
     {% block content %}{% endblock %}
 
+    <!-- ОРИГИНАЛЬНЫЙ ПОДВАЛ: Чистый, без выделений, ссылки ровно справа -->
     <footer class="foot">
         <a class="brand" href="{% url 'home' %}">Зачётка</a>
         <a href="{% url 'materials:index' %}">Архив</a>
         <a href="{% url 'tickets:index' %}">Билеты</a>
         <a href="{% url 'timer:index' %}">Таймер</a>
         <a href="{% url 'accounts:index' %}">Профиль</a>
-        <span class="muted" style="margin-left: auto;">&copy; 2026 Зачётка</span>
+        <span>© 2026 Зачётка</span>
     </footer>
 
-    <script src="{% static 'vendor/bootstrap/bootstrap.bundle.min.js' %}"></script>
 </body>
 </html>
