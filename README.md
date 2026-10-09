@@ -50,7 +50,7 @@ cd zachetka
 
 # 2. Создать виртуальное окружение — отдельную «коробку» для библиотек проекта
 python -m venv venv
-
+venv\Scripts\Activate.ps1
 # 3. Включить его
 venv\Scripts\activate          # Windows
  **Windows: ошибка «выполнение сценариев отключено в этой системе»?**
