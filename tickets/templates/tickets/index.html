@@ -1,26 +1,53 @@
 {% extends "base.html" %}
 
+{% block title %}Билеты{% endblock %}
+
 {% block content %}
 <style>
     /* Стили для интерактивной подсветки строк билетов */
     .row-status-none {
-        background-color: rgba(246, 195, 178, 0.15) !important; /* Мягкий красный */
+        background-color: rgba(246, 195, 178, 0.15) !important;
         transition: background-color 0.3s ease;
     }
 
     .row-status-bad {
-        background-color: rgba(255, 193, 7, 0.1) !important; /* Мягкий жёлтый */
+        background-color: rgba(255, 193, 7, 0.1) !important;
         transition: background-color 0.3s ease;
     }
 
     .row-status-good {
-        background-color: rgba(63, 90, 42, 0.08) !important; /* Мягкий зелёный */
+        background-color: rgba(63, 90, 42, 0.08) !important;
         transition: background-color 0.3s ease;
     }
 
-    /* Исправляем цвет текста активной кнопки, чтобы он не сливался */
     .st.on {
         color: #F3F6E8 !important;
+    }
+
+    /* Стили оригинального всплывающего окна таймера билета (ФТ-08) */
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(38, 51, 26, 0.5);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+    }
+
+    .modal-box {
+        background: #F3F6E8;
+        border: 1px solid #C9D6A9;
+        padding: 40px;
+        max-width: 500px;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+        box-sizing: border-box;
     }
 </style>
 
@@ -29,7 +56,8 @@
         <div style="display:flex;flex-direction:column;gap:16px"><h1 class="h1">Билеты</h1></div>
         <div style="display:flex;flex-wrap:wrap;gap:16px;align-items:flex-end">
             <label style="min-width:260px"><span class="lbl">Предмет</span><select><option>Математический анализ</option></select></label>
-            <a class="btn" href="#">Случайный билет</a>
+            <!-- Добавили id для кнопки вызова -->
+            <button type="button" id="random-ticket-btn" class="btn">Случайный билет</button>
         </div>
     </div>
 
@@ -59,28 +87,83 @@
     </div>
 </div>
 
-<!-- Логика управления статусами и подсветкой строк -->
+<!-- Окно случайного билета с таймером (ФТ-08) -->
+<div id="ticket-modal" class="modal-overlay">
+    <div class="modal-box">
+        <span class="lbl" style="color:#3F5A2A; font-weight:700;">Выпавший билет</span>
+        <h2 id="modal-ticket-title" class="serif" style="font-size:22px; font-weight:700; color:#26331A; line-height:1.3;">Загрузка...</h2>
+
+        <div style="border-top:1px solid #C9D6A9; border-bottom:1px solid #C9D6A9; padding:20px 0; text-align:center;">
+            <span class="lbl" style="display:block; margin-bottom:4px;">Время на подготовку</span>
+            <div id="modal-timer-display" class="serif" style="font-size:48px; font-weight:800; color:#26331A;">05:00</div>
+        </div>
+
+        <div style="display:flex; gap:12px;">
+            <button type="button" id="modal-close-btn" class="btn ghost" style="flex:1;">Закрыть</button>
+        </div>
+    </div>
+</div>
+
 <script>
     document.addEventListener('DOMContentLoaded', () => {
     const rows = document.querySelectorAll('#tickets-list .row');
     const progressText = document.getElementById('progress-text');
     const progressBar = document.getElementById('progress-bar');
 
+    // Логика модального окна и таймера билета
+    const randomBtn = document.getElementById('random-ticket-btn');
+    const modal = document.getElementById('ticket-modal');
+    const modalTitle = document.getElementById('modal-ticket-title');
+    const modalTimer = document.getElementById('modal-timer-display');
+    const modalClose = document.getElementById('modal-close-btn');
+    let ticketInterval = null;
+
+    randomBtn.addEventListener('click', () => {
+    if(rows.length === 0) return;
+
+    // Выбираем случайный билет из списка на странице
+    const randomIndex = Math.floor(Math.random() * rows.length);
+    const selectedTicketText = rows[randomIndex].querySelector('.ttl').textContent;
+    const selectedTicketNum = rows[randomIndex].querySelector('.lbl').textContent;
+
+    modalTitle.textContent = `${selectedTicketNum}. ${selectedTicketText}`;
+    modal.style.display = 'flex';
+
+    // Запуск таймера на 5 минут (300 секунд)
+    let timeRemaining = 5 * 60;
+    clearInterval(ticketInterval);
+
+    ticketInterval = setInterval(() => {
+    timeRemaining--;
+    let m = Math.floor(timeRemaining / 60);
+    let s = timeRemaining % 60;
+    modalTimer.textContent = `${m < 10 ? '0' : ''}${m}:${s < 10 ? '0' : ''}${s}`;
+
+    if(timeRemaining <= 0) {
+    clearInterval(ticketInterval);
+    alert('Время на подготовку вышло! Пора отвечать.');
+    }
+    }, 1000);
+    });
+
+    modalClose.addEventListener('click', () => {
+    modal.style.display = 'none';
+    clearInterval(ticketInterval);
+    modalTimer.textContent = "05:00";
+    });
+
+    // Логика статус-кнопок
     function calculateProgress() {
     const totalTickets = rows.length;
     if (totalTickets === 0) return;
-
     const learnedTickets = document.querySelectorAll('#tickets-list button[data-status="good"].on').length;
     const percentage = Math.round((learnedTickets / totalTickets) * 100);
-
     progressText.textContent = `${percentage}%`;
     progressBar.style.width = `${percentage}%`;
     }
 
     function updateRowBackground(row, status) {
-    // Удаляем старые классы подсветки
     row.classList.remove('row-status-none', 'row-status-bad', 'row-status-good');
-    // Добавляем класс, соответствующий выбранному статусу
     row.classList.add(`row-status-${status}`);
     }
 
@@ -90,11 +173,8 @@
     btn.addEventListener('click', () => {
     buttons.forEach(b => b.classList.remove('on'));
     btn.classList.add('on');
-
-    // Получаем выбранный статус и перекрашиваем строку билета
     const status = btn.getAttribute('data-status');
     updateRowBackground(row, status);
-
     calculateProgress();
     });
     });

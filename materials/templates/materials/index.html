@@ -4,11 +4,14 @@
 
 {% block content %}
 <div class="wrap">
+
+    <!-- Заголовок и кнопка загрузки -->
     <div class="top">
-        <div style="display:flex;flex-direction:column;gap:16px"><h1 class="h1">Архив</h1></div>
-        <a class="btn" href="#">+ Загрузить материал</a>
+        <h1 class="h1">Архив</h1>
+        <button class="btn">+ Загрузить материал</button>
     </div>
 
+    <!-- Оригинальная панель фильтров -->
     <div class="grid4">
         <label><span class="lbl">Предмет</span><select><option>Все предметы</option></select></label>
         <label><span class="lbl">Преподаватель</span><select><option>Все преподаватели</option></select></label>
@@ -16,46 +19,111 @@
         <label><span class="lbl">Год</span><select><option>Все годы</option></select></label>
     </div>
 
-    <div style="border-bottom:1px solid #C9D6A9">
-        <div class="row">
+    <!-- Чистый контейнер списка материалов с id для JS-сортировки (ФТ-10) -->
+    <div id="materials-container" style="display:flex;flex-direction:column">
+
+        <!-- Строка 1: PDF -->
+        <div class="row" data-likes="12">
             <span class="mark" style="width:56px;text-align:center;">PDF</span>
             <div class="ttl">
                 <h3 class="serif" style="font-size:20px;font-weight:700;line-height:1.3">Конспект лекций: пределы и производные</h3>
-                <p class="muted" style="font-size:14px;margin-top:4px">Математический анализ · Фамилия И. О. · 1 курс · 2025</p>
+                <span class="muted" style="font-size:14px;margin-top:4px">Математический анализ · Фамилия И. О. · 1 курс · 2025</span>
             </div>
-            <a class="btn ghost" href="#">Полезно · 12</a>
-            <span style="display:flex;gap:8px"><a class="btn ghost" href="#">Открыть</a><a class="btn" href="#">Скачать</a></span>
+            <div style="display:flex;gap:12px;flex-wrap:wrap">
+                <button type="button" class="btn ghost btn-like">ПОЛЕЗНО · <span class="like-count">12</span></button>
+                <span style="display:flex;gap:8px"><a class="btn ghost" href="#">Открыть</a><a class="btn" href="#">Скачать</a></span>
+            </div>
         </div>
 
-        <div class="row">
+        <!-- Строка 2: JPG -->
+        <div class="row" data-likes="8">
             <span class="mark" style="width:56px;text-align:center;">JPG</span>
             <div class="ttl">
                 <h3 class="serif" style="font-size:20px;font-weight:700;line-height:1.3">Фото доски: законы Ньютона</h3>
-                <p class="muted" style="font-size:14px;margin-top:4px">Физика · Фамилия И. О. · 1 курс · 2025</p>
+                <span class="muted" style="font-size:14px;margin-top:4px">Физика · Фамилия И. О. · 1 курс · 2025</span>
             </div>
-            <a class="btn ghost" href="#">Полезно · 8</a>
-            <span style="display:flex;gap:8px"><a class="btn ghost" href="#">Открыть</a><a class="btn" href="#">Скачать</a></span>
+            <div style="display:flex;gap:12px;flex-wrap:wrap">
+                <button type="button" class="btn ghost btn-like">ПОЛЕЗНО · <span class="like-count">8</span></button>
+                <span style="display:flex;gap:8px"><a class="btn ghost" href="#">Открыть</a><a class="btn" href="#">Скачать</a></span>
+            </div>
         </div>
 
-        <div class="row">
+        <!-- Строка 3: DOCX -->
+        <div class="row" data-likes="5">
             <span class="mark" style="width:56px;text-align:center;background:#C5D6A0">DOCX</span>
             <div class="ttl">
                 <h3 class="serif" style="font-size:20px;font-weight:700;line-height:1.3">Шпаргалка по истории Древнего мира</h3>
-                <p class="muted" style="font-size:14px;margin-top:4px">История · Фамилия И. О. · 1 курс · 2026</p>
+                <span class="muted" style="font-size:14px;margin-top:4px">История · Фамилия И. О. · 1 курс · 2026</span>
             </div>
-            <a class="btn ghost" href="#">Полезно · 5</a>
-            <span style="display:flex;gap:8px"><a class="btn ghost" href="#">Открыть</a><a class="btn" href="#">Скачать</a></span>
+            <div style="display:flex;gap:12px;flex-wrap:wrap">
+                <button type="button" class="btn ghost btn-like">ПОЛЕЗНО · <span class="like-count">5</span></button>
+                <span style="display:flex;gap:8px"><a class="btn ghost" href="#">Открыть</a><a class="btn" href="#">Скачать</a></span>
+            </div>
         </div>
 
-        <div class="row">
+        <!-- Строка 4: PNG -->
+        <div class="row last" data-likes="3">
             <span class="mark" style="width:56px;text-align:center;">PNG</span>
             <div class="ttl">
                 <h3 class="serif" style="font-size:20px;font-weight:700;line-height:1.3">Схема строения клетки</h3>
-                <p class="muted" style="font-size:14px;margin-top:4px">Биология · Фамилия И. О. · 1 курс · 2026</p>
+                <span class="muted" style="font-size:14px;margin-top:4px">Биология · Фамилия И. О. · 1 курс · 2026</span>
             </div>
-            <a class="btn ghost" href="#">Полезно · 3</a>
-            <span style="display:flex;gap:8px"><a class="btn ghost" href="#">Открыть</a><a class="btn" href="#">Скачать</a></span>
+            <div style="display:flex;gap:12px;flex-wrap:wrap">
+                <button type="button" class="btn ghost btn-like">ПОЛЕЗНО · <span class="like-count">3</span></button>
+                <span style="display:flex;gap:8px"><a class="btn ghost" href="#">Открыть</a><a class="btn" href="#">Скачать</a></span>
+            </div>
         </div>
+
     </div>
 </div>
+
+<!-- Скрипт интерактивных лайков и мгновенной сортировки (ФТ-10) -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+    const container = document.getElementById('materials-container');
+
+    function sortMaterials() {
+    const rows = Array.from(container.querySelectorAll('.row'));
+
+    rows.sort((a, b) => {
+    return parseInt(b.getAttribute('data-likes'), 10) - parseInt(a.getAttribute('data-likes'), 10);
+    });
+
+    rows.forEach((row, index) => {
+    row.classList.remove('last');
+    if (index === rows.length - 1) {
+    row.classList.add('last');
+    }
+    container.appendChild(row);
+    });
+    }
+
+    container.querySelectorAll('.btn-like').forEach(button => {
+    button.addEventListener('click', () => {
+    const row = button.closest('.row');
+    const countSpan = button.querySelector('.like-count');
+
+    let currentLikes = parseInt(row.getAttribute('data-likes'), 10);
+
+    // Интерактивное изменение цвета кнопки (убираем/возвращаем класс ghost)
+    if (button.classList.contains('on')) {
+    button.classList.remove('on');
+    button.classList.add('ghost'); // Возвращаем прозрачный стиль
+    currentLikes--;
+    } else {
+    button.classList.add('on');
+    button.classList.remove('ghost'); // Делаем залитой тёмно-зелёной кнопкой
+    currentLikes++;
+    }
+
+    countSpan.textContent = currentLikes;
+    row.setAttribute('data-likes', currentLikes);
+
+    sortMaterials();
+    });
+    });
+
+    sortMaterials();
+    });
+</script>
 {% endblock %}

@@ -3,7 +3,66 @@
 {% block title %}Мои сессии — Зачётка{% endblock %}
 
 {% block content %}
-<div class="wrap">
+<style>
+    /* Стили для автономного CSS-графика активности (ФТ-11) */
+    .chart-container {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        height: 200px;
+        padding-top: 20px;
+        position: relative;
+        border-bottom: 1px solid #C9D6A9;
+    }
+
+    .chart-bar-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        flex: 1;
+        gap: 8px;
+    }
+
+    .chart-bar {
+        width: 70%;
+        max-width: 32px;
+        background-color: #3F5A2A; /* Фирменный тёмно-зелёный */
+        transition: height 0.3s ease;
+    }
+
+        .chart-bar:hover {
+            background-color: #26331A;
+        }
+
+    /* Стили для сетки календаря активности в стиле GitHub (ФТ-15) */
+    .crypto-grid {
+        display: grid;
+        grid-template-columns: repeat(12, minmax(0, 1fr));
+        gap: 4px;
+        max-width: 320px;
+        margin-top: 12px;
+    }
+
+    .crypto-cell {
+        aspect-ratio: 1;
+        background: #E8EDE0;
+        border: 1px solid rgba(201, 214, 169, 0.3);
+    }
+
+    .level-1 {
+        background: #C5D6A0 !important;
+    }
+
+    .level-2 {
+        background: #9CB07A !important;
+    }
+
+    .level-3 {
+        background: #3F5A2A !important;
+    }
+</style>
+
+<div class="wrap" style="gap:48px;">
     <!-- Шапка страницы -->
     <div class="top">
         <div style="display:flex;flex-direction:column;gap:16px">
@@ -13,7 +72,7 @@
         <a class="btn" href="{% url 'timer:index' %}">← К ТАЙМЕРУ</a>
     </div>
 
-    <!-- Блок общей мини-статистики из Figma -->
+    <!-- Блок общей мини-статистики -->
     <div style="display:flex;border-top:1px solid #C9D6A9;border-bottom:1px solid #C9D6A9">
         <div style="flex:1;padding:16px 0">
             <span class="lbl">Всего сфокусирован</span>
@@ -25,46 +84,55 @@
         </div>
     </div>
 
-    <!-- Полный детальный список сессий строго по макету дизайнера -->
+    <!-- ДВУХКОЛОНОЧНЫЙ БЛОК: График и Календарь -->
+    <div style="display:flex; flex-wrap:wrap; gap:56px; align-items:flex-start;">
+
+        <!-- Левая колонка: Чистый автономный CSS-график (ФТ-11) -->
+        <div style="flex:1 1 500px; display:flex; flex-direction:column; gap:16px;">
+            <span class="lbl">Статистика фокуса по дням (мин)</span>
+            <div style="background: rgba(201, 214, 169, 0.1); border: 1px solid #C9D6A9; padding: 20px; box-sizing: border-box;">
+
+                <div class="chart-container">
+                    <!-- Столбики дней: высота в % соответствует минутам занятия -->
+                    <div class="chart-bar-wrapper"><div class="chart-bar" style="height: 35%;"></div><span class="lbl">Пн</span></div>
+                    <div class="chart-bar-wrapper"><div class="chart-bar" style="height: 65%;"></div><span class="lbl">Вт</span></div>
+                    <div class="chart-bar-wrapper"><div class="chart-bar" style="height: 15%;"></div><span class="lbl">Ср</span></div>
+                    <div class="chart-bar-wrapper"><div class="chart-bar" style="height: 85%;"></div><span class="lbl">Чт</span></div>
+                    <div class="chart-bar-wrapper"><div class="chart-bar" style="height: 45%;"></div><span class="lbl">Пт</span></div>
+                    <div class="chart-bar-wrapper"><div class="chart-bar" style="height: 0px;"></div><span class="lbl">Сб</span></div>
+                    <div class="chart-bar-wrapper"><div class="chart-bar" style="height: 25%;"></div><span class="lbl">Вс</span></div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Правая колонка: Календарь активности а-ля GitHub (ФТ-15) -->
+        <div style="flex:1 1 300px; display:flex; flex-direction:column; gap:16px;">
+            <span class="lbl">Календарь активности</span>
+            <div style="background: rgba(201, 214, 169, 0.1); border: 1px solid #C9D6A9; padding: 24px; box-sizing: border-box; display:flex; flex-direction:column; justify-content:center;">
+                <span class="muted" style="font-size:13px;">Интенсивность занятий за последние недели</span>
+
+                <div class="crypto-grid">
+                    <div class="crypto-cell level-3"></div><div class="crypto-cell level-1"></div><div class="crypto-cell"></div><div class="crypto-cell level-2"></div>
+                    <div class="crypto-cell"></div><div class="crypto-cell level-1"></div><div class="crypto-cell level-3"></div><div class="crypto-cell"></div>
+                    <div class="crypto-cell level-2"></div><div class="crypto-cell"></div><div class="crypto-cell level-1"></div><div class="crypto-cell level-2"></div>
+                    <div class="crypto-cell level-1"></div><div class="crypto-cell level-2"></div><div class="crypto-cell level-3"></div><div class="crypto-cell"></div>
+                    <div class="crypto-cell level-1"></div><div class="crypto-cell"></div><div class="crypto-cell level-2"></div><div class="crypto-cell level-1"></div>
+                    <div class="crypto-cell"></div><div class="crypto-cell level-3"></div><div class="crypto-cell level-2"></div><div class="crypto-cell level-1"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Полный детальный список сессий -->
     <div>
         <h2 class="serif" style="font-size:22px;font-weight:700;margin-bottom:16px">История занятий</h2>
         <div style="display:flex;flex-direction:column">
-
-            <!-- Сессия 1 -->
-            <div class="row" style="padding:14px 0">
-                <span class="muted" style="width:70px">10:15</span>
-                <span style="flex:1; font-weight:600;">Математический анализ</span>
-                <span class="lbl">25 мин</span>
-            </div>
-
-            <!-- Сессия 2 -->
-            <div class="row" style="padding:14px 0">
-                <span class="muted" style="width:70px">10:45</span>
-                <span style="flex:1; font-weight:600;">Математический анализ</span>
-                <span class="lbl">25 мин</span>
-            </div>
-
-            <!-- Сессия 3 -->
-            <div class="row" style="padding:14px 0">
-                <span class="muted" style="width:70px">12:00</span>
-                <span style="flex:1; font-weight:600;">История</span>
-                <span class="lbl">25 мин</span>
-            </div>
-
-            <!-- Сессия 4 -->
-            <div class="row" style="padding:14px 0">
-                <span class="muted" style="width:70px">14:30</span>
-                <span style="flex:1; font-weight:600;">Программирование на Python</span>
-                <span class="lbl">25 мин</span>
-            </div>
-
-            <!-- Сессия 5 -->
-            <div class="row last" style="padding:14px 0">
-                <span class="muted" style="width:70px">16:15</span>
-                <span style="flex:1; font-weight:600;">Дискретная математика</span>
-                <span class="lbl">25 мин</span>
-            </div>
-
+            <div class="row" style="padding:14px 0"><span class="muted" style="width:70px">10:15</span><span style="flex:1; font-weight:600;">Математический анализ</span><span class="lbl">25 мин</span></div>
+            <div class="row" style="padding:14px 0"><span class="muted" style="width:70px">10:45</span><span style="flex:1; font-weight:600;">Математический анализ</span><span class="lbl">25 мин</span></div>
+            <div class="row" style="padding:14px 0"><span class="muted" style="width:70px">12:00</span><span style="flex:1; font-weight:600;">История</span><span class="lbl">25 мин</span></div>
+            <div class="row" style="padding:14px 0"><span class="muted" style="width:70px">14:30</span><span style="flex:1; font-weight:600;">Программирование на Python</span><span class="lbl">25 мин</span></div>
+            <div class="row last" style="padding:14px 0"><span class="muted" style="width:70px">16:15</span><span style="flex:1; font-weight:600;">Дискретная математика</span><span class="lbl">25 мин</span></div>
         </div>
     </div>
 </div>
