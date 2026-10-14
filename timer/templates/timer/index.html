@@ -42,12 +42,12 @@
                 <div style="flex:1;padding:16px 0"><span class="lbl">Сегодня</span><p class="serif" style="font-size:32px;font-weight:700;color:#3F5A2A">1,5 ч</p></div>
                 <div style="flex:1;padding:16px 24px;border-left:1px solid #C9D6A9"><span class="lbl">За неделю</span><p class="serif" style="font-size:32px;font-weight:700">9 ч</p></div>
             </div>
-            <div>
-                <h2 class="serif" style="font-size:22px;font-weight:700;margin-bottom:8px">Завершённые сессии</h2>
-                <div class="row" style="padding:14px 0"><span class="muted" style="width:56px">10:15</span><span style="flex:1">Математический анализ</span><span class="lbl">25 мин</span></div>
-                <div class="row" style="padding:14px 0"><span class="muted" style="width:56px">10:45</span><span style="flex:1">Математический анализ</span><span class="lbl">25 мин</span></div>
-                <div class="row last" style="padding:14px 0"><span class="muted" style="width:56px">12:00</span><span style="flex:1">История</span><span class="lbl">25 мин</span></div>
+            <!-- Заголовок и умная кнопка перехода к полной истории (ФТ-07) -->
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+                <h2 class="serif" style="font-size:22px;font-weight:700;">Завершённые сессии</h2>
+                <a href="{% url 'timer:sessions' %}" class="lbl" style="text-decoration:none; color:#3F5A2A; font-weight:700; font-size:11px;">Все сессии &rarr;</a>
             </div>
+
         </div>
     </div>
 </div>

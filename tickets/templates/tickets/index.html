@@ -1,8 +1,29 @@
 {% extends "base.html" %}
 
-{% block title %}Билеты{% endblock %}
-
 {% block content %}
+<style>
+    /* Стили для интерактивной подсветки строк билетов */
+    .row-status-none {
+        background-color: rgba(246, 195, 178, 0.15) !important; /* Мягкий красный */
+        transition: background-color 0.3s ease;
+    }
+
+    .row-status-bad {
+        background-color: rgba(255, 193, 7, 0.1) !important; /* Мягкий жёлтый */
+        transition: background-color 0.3s ease;
+    }
+
+    .row-status-good {
+        background-color: rgba(63, 90, 42, 0.08) !important; /* Мягкий зелёный */
+        transition: background-color 0.3s ease;
+    }
+
+    /* Исправляем цвет текста активной кнопки, чтобы он не сливался */
+    .st.on {
+        color: #F3F6E8 !important;
+    }
+</style>
+
 <div class="wrap">
     <div class="top">
         <div style="display:flex;flex-direction:column;gap:16px"><h1 class="h1">Билеты</h1></div>
@@ -12,19 +33,23 @@
         </div>
     </div>
 
+    <!-- Интерактивный блок прогресса -->
     <div style="display:flex;flex-wrap:wrap;gap:24px 48px;align-items:center">
-        <span class="serif" style="font-size:clamp(56px,7vw,80px);font-weight:700;line-height:.9;color:#3F5A2A">62%</span>
+        <span id="progress-text" class="serif" style="font-size:clamp(56px,7vw,80px);font-weight:700;line-height:.9;color:#3F5A2A">0%</span>
         <div style="flex:1 1 300px;display:flex;flex-direction:column;gap:10px">
             <span class="lbl">Готовность по предмету</span>
-            <div style="height:6px;background:#DCE7BE"><div style="width:62%;height:100%;background:#3F5A2A"></div></div>
+            <div style="height:6px;background:#DCE7BE">
+                <div id="progress-bar" style="width:0%;height:100%;background:#3F5A2A;transition:width 0.3s ease;"></div>
+            </div>
         </div>
     </div>
 
-    <div style="border-bottom:1px solid #C9D6A9">
-        <div class="row"><span class="lbl" style="width:32px">01</span><span class="serif ttl" style="font-size:18px;font-weight:600;line-height:1.3">Определение предела последовательности</span><span style="display:flex"><button type="button" class="st">Не знаю</button><button type="button" class="st">Плохо</button><button type="button" class="st on">Выучил</button></span></div>
-        <div class="row"><span class="lbl" style="width:32px">02</span><span class="serif ttl" style="font-size:18px;font-weight:600;line-height:1.3">Теорема о пределе монотонной последовательности</span><span style="display:flex"><button type="button" class="st">Не знаю</button><button type="button" class="st on">Плохо</button><button type="button" class="st">Выучил</button></span></div>
-        <div class="row"><span class="lbl" style="width:32px">03</span><span class="serif ttl" style="font-size:18px;font-weight:600;line-height:1.3">Производная сложной функции</span><span style="display:flex"><button type="button" class="st on">Не знаю</button><button type="button" class="st">Плохо</button><button type="button" class="st">Выучил</button></span></div>
-        <div class="row"><span class="lbl" style="width:32px">04</span><span class="serif ttl" style="font-size:18px;font-weight:600;line-height:1.3">Формула Тейлора</span><span style="display:flex"><button type="button" class="st on">Не знаю</button><button type="button" class="st">Плохо</button><button type="button" class="st">Выучил</button></span></div>
+    <!-- Чек-лист билетов -->
+    <div id="tickets-list" style="border-bottom:1px solid #C9D6A9">
+        <div class="row row-status-good" data-ticket-id="1"><span class="lbl" style="width:32px">01</span><span class="serif ttl" style="font-size:18px;font-weight:600;line-height:1.3">Определение предела последовательности</span><span style="display:flex"><button type="button" class="st" data-status="none">Не знаю</button><button type="button" class="st" data-status="bad">Плохо</button><button type="button" class="st on" data-status="good">Выучил</button></span></div>
+        <div class="row row-status-bad" data-ticket-id="2"><span class="lbl" style="width:32px">02</span><span class="serif ttl" style="font-size:18px;font-weight:600;line-height:1.3">Теорема о пределе монотонной последовательности</span><span style="display:flex"><button type="button" class="st" data-status="none">Не знаю</button><button type="button" class="st on" data-status="bad">Плохо</button><button type="button" class="st" data-status="good">Выучил</button></span></div>
+        <div class="row row-status-none" data-ticket-id="3"><span class="lbl" style="width:32px">03</span><span class="serif ttl" style="font-size:18px;font-weight:600;line-height:1.3">Производная сложной функции</span><span style="display:flex"><button type="button" class="st on" data-status="none">Не знаю</button><button type="button" class="st" data-status="bad">Плохо</button><button type="button" class="st" data-status="good">Выучил</button></span></div>
+        <div class="row row-status-none" data-ticket-id="4"><span class="lbl" style="width:32px">04</span><span class="serif ttl" style="font-size:18px;font-weight:600;line-height:1.3">Формула Тейлора</span><span style="display:flex"><button type="button" class="st on" data-status="none">Не знаю</button><button type="button" class="st" data-status="bad">Плохо</button><button type="button" class="st" data-status="good">Выучил</button></span></div>
     </div>
 
     <div style="display:flex;flex-direction:column;gap:16px;max-width:640px">
@@ -33,4 +58,49 @@
         <a class="btn" style="width:fit-content" href="#">Сохранить список</a>
     </div>
 </div>
+
+<!-- Логика управления статусами и подсветкой строк -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+    const rows = document.querySelectorAll('#tickets-list .row');
+    const progressText = document.getElementById('progress-text');
+    const progressBar = document.getElementById('progress-bar');
+
+    function calculateProgress() {
+    const totalTickets = rows.length;
+    if (totalTickets === 0) return;
+
+    const learnedTickets = document.querySelectorAll('#tickets-list button[data-status="good"].on').length;
+    const percentage = Math.round((learnedTickets / totalTickets) * 100);
+
+    progressText.textContent = `${percentage}%`;
+    progressBar.style.width = `${percentage}%`;
+    }
+
+    function updateRowBackground(row, status) {
+    // Удаляем старые классы подсветки
+    row.classList.remove('row-status-none', 'row-status-bad', 'row-status-good');
+    // Добавляем класс, соответствующий выбранному статусу
+    row.classList.add(`row-status-${status}`);
+    }
+
+    rows.forEach(row => {
+    const buttons = row.querySelectorAll('button.st');
+    buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+    buttons.forEach(b => b.classList.remove('on'));
+    btn.classList.add('on');
+
+    // Получаем выбранный статус и перекрашиваем строку билета
+    const status = btn.getAttribute('data-status');
+    updateRowBackground(row, status);
+
+    calculateProgress();
+    });
+    });
+    });
+
+    calculateProgress();
+    });
+</script>
 {% endblock %}

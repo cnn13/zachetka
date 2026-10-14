@@ -1,0 +1,71 @@
+﻿{% extends "base.html" %}
+
+{% block title %}Мои сессии — Зачётка{% endblock %}
+
+{% block content %}
+<div class="wrap">
+    <!-- Шапка страницы -->
+    <div class="top">
+        <div style="display:flex;flex-direction:column;gap:16px">
+            <h1 class="h1">Мои сессии</h1>
+            <p class="muted" style="font-size:14px;margin-top:4px">Полная история вашей подготовки к сессии по таймеру Помодоро</p>
+        </div>
+        <a class="btn" href="{% url 'timer:index' %}">← К ТАЙМЕРУ</a>
+    </div>
+
+    <!-- Блок общей мини-статистики из Figma -->
+    <div style="display:flex;border-top:1px solid #C9D6A9;border-bottom:1px solid #C9D6A9">
+        <div style="flex:1;padding:16px 0">
+            <span class="lbl">Всего сфокусирован</span>
+            <p class="serif" style="font-size:32px;font-weight:700;color:#3F5A2A">10,5 ч</p>
+        </div>
+        <div style="flex:1;padding:16px 24px;border-left:1px solid #C9D6A9">
+            <span class="lbl">Завершено сессий</span>
+            <p class="serif" style="font-size:32px;font-weight:700">25 сессий</p>
+        </div>
+    </div>
+
+    <!-- Полный детальный список сессий строго по макету дизайнера -->
+    <div>
+        <h2 class="serif" style="font-size:22px;font-weight:700;margin-bottom:16px">История занятий</h2>
+        <div style="display:flex;flex-direction:column">
+
+            <!-- Сессия 1 -->
+            <div class="row" style="padding:14px 0">
+                <span class="muted" style="width:70px">10:15</span>
+                <span style="flex:1; font-weight:600;">Математический анализ</span>
+                <span class="lbl">25 мин</span>
+            </div>
+
+            <!-- Сессия 2 -->
+            <div class="row" style="padding:14px 0">
+                <span class="muted" style="width:70px">10:45</span>
+                <span style="flex:1; font-weight:600;">Математический анализ</span>
+                <span class="lbl">25 мин</span>
+            </div>
+
+            <!-- Сессия 3 -->
+            <div class="row" style="padding:14px 0">
+                <span class="muted" style="width:70px">12:00</span>
+                <span style="flex:1; font-weight:600;">История</span>
+                <span class="lbl">25 мин</span>
+            </div>
+
+            <!-- Сессия 4 -->
+            <div class="row" style="padding:14px 0">
+                <span class="muted" style="width:70px">14:30</span>
+                <span style="flex:1; font-weight:600;">Программирование на Python</span>
+                <span class="lbl">25 мин</span>
+            </div>
+
+            <!-- Сессия 5 -->
+            <div class="row last" style="padding:14px 0">
+                <span class="muted" style="width:70px">16:15</span>
+                <span style="flex:1; font-weight:600;">Дискретная математика</span>
+                <span class="lbl">25 мин</span>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}
