@@ -52,39 +52,132 @@
     </div>
 </div>
 
-<!-- JavaScript с поддержкой шкалы прогресса -->
+<!-- JavaScript с автосохранением и фиксацией сессий (ФТ-07) -->
 <script>
-    let timer = null; let totalDuration = 25 * 60; let timeLeft = totalDuration; let isWork = true;
-    const display = document.getElementById('countdown'); const startBtn = document.getElementById('start-btn');
-    const pauseBtn = document.getElementById('pause-btn'); const bar = document.getElementById('progress-bar');
-    const wBtn = document.getElementById('work-btn'); const bBtn = document.getElementById('break-btn');
+    let timer = null;
+    let isWork = true;
+    let totalDuration = 25 * 60;
+    let timeLeft = totalDuration;
+
+    const display = document.getElementById('countdown');
+    const startBtn = document.getElementById('start-btn');
+    const pauseBtn = document.getElementById('pause-btn');
+    const bar = document.getElementById('progress-bar');
+    const wBtn = document.getElementById('work-btn');
+    const bBtn = document.getElementById('break-btn');
+
+    // Функция для вычисления текущего времени (ЧЧ:ММ)
+    function getCurrentTime() {
+    const now = new Date();
+    let hours = now.getHours();
+    let minutes = now.getMinutes();
+    return `${hours < 10 ? '0' : ''}${hours}:${minutes < 10 ? '0' : ''}${minutes}`;
+    }
 
     function update() {
-    let m = Math.floor(timeLeft / 60); let s = timeLeft % 60;
+    let m = Math.floor(timeLeft / 60);
+    let s = timeLeft % 60;
     display.textContent = `${m}:${s < 10 ? '0' : ''}${s}`;
     let percentage = ((totalDuration - timeLeft) / totalDuration) * 100;
     bar.style.width = `${percentage}%`;
+
+    // ФТ-07: Сохраняем текущее состояние, чтобы не терялось при перезагрузке
+    localStorage.setItem('timer_timeLeft', timeLeft);
+    localStorage.setItem('timer_isWork', isWork);
+    localStorage.setItem('timer_totalDuration', totalDuration);
     }
 
     function setMode(w) {
-    clearInterval(timer); timer = null; isWork = w;
-    totalDuration = isWork ? 25 * 60 : 5 * 60; timeLeft = totalDuration;
+    clearInterval(timer);
+    timer = null;
+    isWork = w;
+    totalDuration = isWork ? 25 * 60 : 5 * 60;
+    timeLeft = totalDuration;
     update();
-    if(isWork){wBtn.classList.add('on');wBtn.disabled=false;bBtn.classList.remove('on')}else{bBtn.classList.add('on');wBtn.classList.remove('on')}
+    if(isWork){
+    wBtn.classList.add('on');
+    bBtn.classList.remove('on');
+    } else {
+    bBtn.classList.add('on');
+    wBtn.classList.remove('on');
+    }
     }
 
-    wBtn.addEventListener('click', () => setMode(true)); bBtn.addEventListener('click', () => setMode(false));
+    // ФТ-07: Функция добавления завершённой сессии на экран
+    function addSessionToList(modeName, durationMin) {
+    const sessionContainer = document.querySelector('h2.serif + style + div, h2.serif + div');
+    if (sessionContainer) {
+    // Удаляем класс last у предыдущей строки, если она есть
+    const oldLast = sessionContainer.querySelector('.row.last');
+    if (oldLast) oldLast.classList.remove('last');
+
+    const timeStr = getCurrentTime();
+    const newRow = document.createElement('div');
+    newRow.className = 'row last';
+    newRow.style.padding = '14px 0';
+    newRow.innerHTML = `<span class="muted" style="width:56px">${timeStr}</span><span style="flex:1">${modeName}</span><span class="lbl">${durationMin} мин</span>`;
+
+    sessionContainer.appendChild(newRow);
+    }
+    }
+
+    wBtn.addEventListener('click', () => setMode(true));
+    bBtn.addEventListener('click', () => setMode(false));
 
     startBtn.addEventListener('click', () => {
     if (!timer) {
     timer = setInterval(() => {
-    if (timeLeft > 0) { timeLeft--; update(); }
-    else { clearInterval(timer); timer = null; alert(isWork ? "Время вышло!" : "Перерыв окончен!"); setMode(!isWork); }
+    if (timeLeft > 0) {
+    timeLeft--;
+    update();
+    } else {
+    clearInterval(timer);
+    timer = null;
+
+    // Фиксируем успешную сессию перед переключением
+    if (isWork) {
+    addSessionToList('Математический анализ (Работа)', 25);
+    } else {
+    addSessionToList('Перерыв окончен', 5);
+    }
+
+    alert(isWork ? "Время работы вышло! Пора отдыхать." : "Перерыв окончен! Пора за работу.");
+    setMode(!isWork);
+    }
     }, 1000);
     }
     });
 
-    pauseBtn.addEventListener('click', () => { if (timer) { clearInterval(timer); timer = null; } });
-    document.getElementById('reset-btn').addEventListener('click', () => { clearInterval(timer); timer = null; timeLeft = totalDuration; update(); });
+    pauseBtn.addEventListener('click', () => {
+    if (timer) {
+    clearInterval(timer);
+    timer = null;
+    }
+    });
+
+    document.getElementById('reset-btn').addEventListener('click', () => {
+    clearInterval(timer);
+    timer = null;
+    timeLeft = totalDuration;
+    update();
+    });
+
+    // ФТ-07: Проверяем, есть ли сохранённое состояние при загрузке страницы
+    document.addEventListener('DOMContentLoaded', () => {
+    if (localStorage.getItem('timer_timeLeft') !== null) {
+    isWork = localStorage.getItem('timer_isWork') === 'true';
+    totalDuration = parseInt(localStorage.getItem('timer_totalDuration'), 10);
+    timeLeft = parseInt(localStorage.getItem('timer_timeLeft'), 10);
+
+    if(isWork){
+    wBtn.classList.add('on');
+    bBtn.classList.remove('on');
+    } else {
+    bBtn.classList.add('on');
+    wBtn.classList.remove('on');
+    }
+    update();
+    }
+    });
 </script>
 {% endblock %}
