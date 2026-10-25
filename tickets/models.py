@@ -23,6 +23,18 @@ class Ticket(models.Model):
     )
     number = models.PositiveIntegerField("Номер билета")
     text = models.TextField("Текст вопроса")
+        # Наш список возможных статусов
+    STATUS_CHOICES = [
+        ('dont_know', 'Не знаю'),
+        ('bad', 'Плохо'),
+        ('learned', 'Выучил'),
+    ]
+    status = models.CharField(
+        "Статус", 
+        max_length=20, 
+        choices=STATUS_CHOICES, 
+        default='learned' # По умолчанию ставим «Выучил», как в твоем дизайне
+    )
 
     class Meta:
         verbose_name = "Билет"
