@@ -65,7 +65,13 @@
     <div style="border-bottom:1px solid #C9D6A9">
         <h2 class="serif" style="font-size:22px;margin-bottom:8px">{{ subject.name }}</h2>
         {% for ticket in subject.tickets.all %}
-        <div class="row"><span class="lbl" style="width:32px">{{ ticket.number|stringformat:"02d" }}</span><span class="serif ttl" style="font-size:18px;font-weight:600;line-height:1.3">{{ ticket.text }}</span><span style="display:flex"><button type="button" class="st">Не знаю</button><button type="button" class="st">Плохо</button><button type="button" class="st on">Выучил</button></span></div>
+        <div class="row">
+            <span class="lbl" style="width:32px">{{ ticket.number|stringformat:"02d" }}</span><span class="serif ttl" style="font-size:18px;font-weight:600;line-height:1.3">{{ ticket.text }}</span><span style="display:flex" class="status-btn-group" data-ticket-id="{{ ticket.id }}">
+                <button type="button" class="st {% if ticket.status == 'dont_know' %}on{% endif %}" data-status="dont_know">Не знаю</button>
+                <button type="button" class="st {% if ticket.status == 'bad' %}on{% endif %}" data-status="bad">Плохо</button>
+                <button type="button" class="st {% if ticket.status == 'learned' or not ticket.status %}on{% endif %}" data-status="learned">Выучил</button>
+            </span>
+        </div>
         {% empty %}
         <p class="muted">Билетов пока нет.</p>
         {% endfor %}
@@ -80,37 +86,37 @@
             <summary style="cursor:pointer;display:flex;gap:16px;align-items:baseline"><span class="lbl">01</span><span class="serif ttl">Понятие предела функции в точке по Коши и по Гейне</span></summary>
             <div style="padding-top:12px">
                 <p>Простыми словами:</p>
-                    <p>Предел функции — это число, к которому стремится значение функции <i>f(x)</i>, когда аргумент <i>x</i> подбирается сколь угодно близко к заданной точке <i>c</i>.</p>
+                <p>Предел функции — это число, к которому стремится значение функции <i>f(x)</i>, когда аргумент <i>x</i> подбирается сколь угодно близко к заданной точке <i>c</i>.</p>
 
-                    <p>Строгое определение по Коши (на языке эпсилон - дельта):</p>
-                    <p>Число <i>L</i> называется пределом функции, если для любого расстояния ε &gt; 0 найдется такое расстояние δ &gt; 0, что как только аргумент попадает в интервал:</p>
-                    <div>
-                        <span class="math-block math-highlight" style="display:flex;justify-content:center;padding:12px;background:#DCE7BE;border-radius:8px;margin:8px 0">0 &lt; |x - c| &lt; δ</span>
-                    </div>
-                    <p>значение самой функции гарантированно попадает в интервал:</p>
-                    <div>
-                        <span class="math-block math-highlight" style="display:flex;justify-content:center;padding:12px;background:#DCE7BE;border-radius:8px;margin:8px 0">|f(x) - L| &lt; ε</span>
-                    </div>
+                <p>Строгое определение по Коши (на языке эпсилон - дельта):</p>
+                <p>Число <i>L</i> называется пределом функции, если для любого расстояния ε &gt; 0 найдется такое расстояние δ &gt; 0, что как только аргумент попадает в интервал:</p>
+                <div>
+                    <span class="math-block math-highlight" style="display:flex;justify-content:center;padding:12px;background:#DCE7BE;border-radius:8px;margin:8px 0">0 &lt; |x - c| &lt; δ</span>
+                </div>
+                <p>значение самой функции гарантированно попадает в интервал:</p>
+                <div>
+                    <span class="math-block math-highlight" style="display:flex;justify-content:center;padding:12px;background:#DCE7BE;border-radius:8px;margin:8px 0">|f(x) - L| &lt; ε</span>
+                </div>
 
-                    <div>
-                        <a href="#" class="btn ghost">Перейти к конспекту лекции</a>
-                    </div>
+                <div>
+                    <a href="#" class="btn ghost">Перейти к конспекту лекции</a>
+                </div>
             </div>
         </details>
         <details style="border-bottom:1px solid #C9D6A9;padding:14px 0">
             <summary style="cursor:pointer;display:flex;gap:16px;align-items:baseline"><span class="lbl">02</span><span class="serif ttl">Теорема Ролля о нулю производной и её геометрический смысл</span></summary>
             <div style="padding-top:12px">
                 <p>Суть теоремы:</p>
-                    <p>If график гладкой функции на концах отрезка находится на одинаковой высоте, то на нем обязательно найдется точка, где касательная будет полностью горизонтальной.</p>
+                <p>If график гладкой функции на концах отрезка находится на одинаковой высоте, то на нем обязательно найдется точка, где касательная будет полностью горизонтальной.</p>
 
-                    <p>Математическое условие:</p>
-                    <p>Если <i>f(a) = f(b)</i>, то на интервале существует точка <i>c</i>, в которой производная равна нулю:</p>
-                    <div>
-                        <span class="math-block math-highlight" style="display:flex;justify-content:center;padding:12px;background:#DCE7BE;border-radius:8px;margin:8px 0">f'(c) = 0</span>
-                    </div>
-                    <div>
-                        <a href="#" class="btn ghost">Перейти к конспекту лекции</a>
-                    </div>
+                <p>Математическое условие:</p>
+                <p>Если <i>f(a) = f(b)</i>, то на интервале существует точка <i>c</i>, в которой производная равна нулю:</p>
+                <div>
+                    <span class="math-block math-highlight" style="display:flex;justify-content:center;padding:12px;background:#DCE7BE;border-radius:8px;margin:8px 0">f'(c) = 0</span>
+                </div>
+                <div>
+                    <a href="#" class="btn ghost">Перейти к конспекту лекции</a>
+                </div>
             </div>
         </details>
         <details style="border-bottom:1px solid #C9D6A9;padding:14px 0">
@@ -118,45 +124,105 @@
             <div style="padding-top:12px">
                 <p>Базовые формулы в чистом виде:</p>
 
-                    <!-- Первый замечательный предел -->
-                    <div>
-                        <span>1) Первый предел:</span>
-                        <div class="math-block" style="display:flex;justify-content:center;padding:12px;background:#DCE7BE;border-radius:8px;margin:8px 0">
-                            <div class="math-limit">
-                                <span>lim</span>
-                                <span class="math-sub">x → 0</span>
-                            </div>
-                            <div class="math-fraction">
-                                <span class="math-numerator">sin x</span>
-                                <span class="math-denominator">x</span>
-                            </div>
-                            <span class="math-highlight">= 1</span>
+                <!-- Первый замечательный предел -->
+                <div>
+                    <span>1) Первый предел:</span>
+                    <div class="math-block" style="display:flex;justify-content:center;padding:12px;background:#DCE7BE;border-radius:8px;margin:8px 0">
+                        <div class="math-limit">
+                            <span>lim</span>
+                            <span class="math-sub">x → 0</span>
                         </div>
-                    </div>
-
-                    <!-- Второй замечательный предел -->
-                    <div>
-                        <span>2) Второй предел:</span>
-                        <div class="math-block" style="display:flex;justify-content:center;padding:12px;background:#DCE7BE;border-radius:8px;margin:8px 0">
-                            <div class="math-limit">
-                                <span>lim</span>
-                                <span class="math-sub">x → ∞</span>
-                            </div>
-                            <span>(1 +</span>
-                            <div class="math-fraction">
-                                <span class="math-numerator">1</span>
-                                <span class="math-denominator">x</span>
-                            </div>
-                            <span>)<sup>x</sup></span>
-                            <span class="math-highlight">= e</span>
+                        <div class="math-fraction">
+                            <span class="math-numerator">sin x</span>
+                            <span class="math-denominator">x</span>
                         </div>
+                        <span class="math-highlight">= 1</span>
                     </div>
+                </div>
 
-                    <div>
-                        <a href="#" class="btn ghost">Перейти к конспекту лекции</a>
+                <!-- Второй замечательный предел -->
+                <div>
+                    <span>2) Второй предел:</span>
+                    <div class="math-block" style="display:flex;justify-content:center;padding:12px;background:#DCE7BE;border-radius:8px;margin:8px 0">
+                        <div class="math-limit">
+                            <span>lim</span>
+                            <span class="math-sub">x → ∞</span>
+                        </div>
+                        <span>(1 +</span>
+                        <div class="math-fraction">
+                            <span class="math-numerator">1</span>
+                            <span class="math-denominator">x</span>
+                        </div>
+                        <span>)<sup>x</sup></span>
+                        <span class="math-highlight">= e</span>
                     </div>
+                </div>
+
+                <div>
+                    <a href="#" class="btn ghost">Перейти к конспекту лекции</a>
+                </div>
             </div>
         </details>
     </div>
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    const btnGroups = document.querySelectorAll('.status-btn-group');
+
+    btnGroups.forEach(group => {
+    const ticketId = group.getAttribute('data-ticket-id');
+    const buttons = group.querySelectorAll('.st');
+
+    buttons.forEach(button => {
+    button.addEventListener('click', function() {
+    const selectedStatus = this.getAttribute('data-status');
+
+    // 1. Формируем реальный fetch-запрос к будущему бэкенду Артёма
+    fetch(`/tickets/update_status/${ticketId}/`, {
+    method: 'POST',
+    headers: {
+    'Content-Type': 'application/json',
+    // Передаем обязательный CSRF-токен защиты Django из куки браузера
+    'X-CSRFToken': getCookie('csrftoken')
+    },
+    body: JSON.stringify({ status: selectedStatus })
+    })
+    .then(response => {
+    if (response.ok) {
+    // Визуально переключаем активный класс "on" ТОЛЬКО при успешном ответе сервера
+    buttons.forEach(btn => btn.classList.remove('on'));
+    this.classList.add('on');
+    } else {
+    // Пока Артём не допишет бэкенд, мы будем падать сюда (404 Not Found)
+    // Для тестирования переключения оставляем локальный перенос класса:
+    buttons.forEach(btn => btn.classList.remove('on'));
+    this.classList.add('on');
+    console.log('Fetch ушел, но бэкенд пока ответил ошибкой (это нормально, Артём еще не создал url)');
+    }
+    })
+    .catch(error => {
+    console.error('Ошибка сети при отправке fetch:', error);
+    });
+    });
+    });
+    });
+
+    // Функция для безопасного извлечения CSRF-токена из Cookie (стандарт для Django)
+    function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+    const cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+    const cookie = cookies[i].trim();
+    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+    break;
+    }
+    }
+    }
+    return cookieValue;
+    }
+    });
+</script>
+
 {% endblock %}
