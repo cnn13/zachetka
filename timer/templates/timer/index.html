@@ -16,7 +16,7 @@
     </div>
 
     <div style="display:flex;flex-wrap:wrap;gap:56px">
-        <!-- Левая колонка: Таймер, полоса прогресса и три кнопки -->
+        <!-- Левая колонка: Таймер, полоса прогресса, выбор предмета и три кнопки -->
         <div style="flex:1 1 440px;display:flex;flex-direction:column;gap:28px">
             <span style="display:flex">
                 <button type="button" id="work-btn" class="st on">Работа 25 мин</button>
@@ -27,6 +27,16 @@
             <!-- Полоса прогресса из оригинального макета -->
             <div style="height:6px;background:#DCE7BE">
                 <div id="progress-bar" style="width:0%;height:100%;background:#3F5A2A;transition:width 1s linear;"></div>
+            </div>
+
+            <!-- Интеграция выбора предмета для сессии -->
+            <div style="display:flex; flex-direction:column; gap:8px">
+                <span class="lbl">Что изучаешь прямо сейчас?</span>
+                <select id="subject-select" style="width:100%; max-width:440px; padding:12px; border-radius:8px; background:#F3F6E8; border:1px solid #C9D6A9; font-family:inherit; font-size:16px;">
+                    <option value="Математический анализ">Математический анализ</option>
+                    <option value="История">История</option>
+                    <option value="Физика">Физика</option>
+                </select>
             </div>
 
             <div style="display:flex;flex-wrap:wrap;gap:12px">
@@ -52,12 +62,13 @@
     </div>
 </div>
 
-<!-- JavaScript с поддержкой шкалы прогресса -->
+<!-- JavaScript с поддержкой FETCH-запросов к бэкенду -->
 <script>
     let timer = null; let totalDuration = 25 * 60; let timeLeft = totalDuration; let isWork = true;
     const display = document.getElementById('countdown'); const startBtn = document.getElementById('start-btn');
     const pauseBtn = document.getElementById('pause-btn'); const bar = document.getElementById('progress-bar');
     const wBtn = document.getElementById('work-btn'); const bBtn = document.getElementById('break-btn');
+    const subjectSelect = document.getElementById('subject-select');
 
     function update() {
     let m = Math.floor(timeLeft / 60); let s = timeLeft % 60;
@@ -70,7 +81,16 @@
     clearInterval(timer); timer = null; isWork = w;
     totalDuration = isWork ? 25 * 60 : 5 * 60; timeLeft = totalDuration;
     update();
-    if(isWork){wBtn.classList.add('on');wBtn.disabled=false;bBtn.classList.remove('on')}else{bBtn.classList.add('on');wBtn.classList.remove('on')}
+    if(isWork){
+    wBtn.classList.add('on');
+    wBtn.disabled=false;
+    bBtn.classList.remove('on');
+    subjectSelect.disabled = false;
+    } else {
+    bBtn.classList.add('on');
+    wBtn.classList.remove('on');
+    subjectSelect.disabled = true;
+    }
     }
 
     wBtn.addEventListener('click', () => setMode(true)); bBtn.addEventListener('click', () => setMode(false));
@@ -79,12 +99,64 @@
     if (!timer) {
     timer = setInterval(() => {
     if (timeLeft > 0) { timeLeft--; update(); }
-    else { clearInterval(timer); timer = null; alert(isWork ? "Время вышло!" : "Перерыв окончен!"); setMode(!isWork); }
+    else {
+    clearInterval(timer);
+    timer = null;
+
+    // Перехватываем конец сессии работы и шлем fetch
+    if (isWork) {
+    sendPomodoroSession(subjectSelect.value);
+    alert("Время вышло! Сессия работы завершена.");
+    } else {
+    alert("Перерыв окончен!");
+    }
+
+    setMode(!isWork);
+    }
     }, 1000);
     }
     });
 
     pauseBtn.addEventListener('click', () => { if (timer) { clearInterval(timer); timer = null; } });
     document.getElementById('reset-btn').addEventListener('click', () => { clearInterval(timer); timer = null; timeLeft = totalDuration; update(); });
+
+    // Функция отправки отработанного помидора через fetch
+    function sendPomodoroSession(subjectName) {
+    fetch('/timer/save_session/', {
+    method: 'POST',
+    headers: {
+    'Content-Type': 'application/json',
+    'X-CSRFToken': getCookie('csrftoken')
+    },
+    body: JSON.stringify({
+    subject_name: subjectName,
+    duration_minutes: 25
+    })
+    })
+    .then(response => {
+    if (response.ok) {
+    console.log('Помодоро-сессия улетела на сервер.');
+    } else {
+    console.log('Fetch ушел, бэкенд Артёма пока не обрабатывает этот URL (это нормально)');
+    }
+    })
+    .catch(error => console.error('Ошибка сети:', error));
+    }
+
+    // Вспомогательная функция для получения CSRF-токена Django
+    function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+    const cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+    const cookie = cookies[i].trim();
+    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+    break;
+    }
+    }
+    }
+    return cookieValue;
+    }
 </script>
 {% endblock %}
