@@ -15,17 +15,94 @@
 
     <div style="border-bottom:1px solid #C9D6A9">
         {% for m in materials %}
-        <div class="row">
-            <span class="mark" style="width:56px;text-align:center;">{{ m.file.name|slice:"-4:"|cut:"."|upper }}</span>
-            <div class="ttl">
-                <h3 class="serif" style="font-size:20px;font-weight:700;line-height:1.3">{{ m.title }}</h3>
-                <p class="muted" style="font-size:14px;margin-top:4px">{{ m.subject }} · {{ m.teacher }} · {{ m.get_course_display }} · {{ m.year }}{% for tag in m.tags.all %} · #{{ tag }}{% endfor %}</p>
+        <div class="row" style="display:flex; justify-content:space-between; align-items:center; padding:16px 0; border-bottom:1px solid #E2E8F0;">
+            <div style="display:flex; gap:16px; align-items:center; flex-grow:1">
+                <!-- Иконка расширения файла -->
+                <span class="mark" style="width:56px; text-align:center; font-weight:bold; background:#F3F6E8; padding:8px; border-radius:6px; color:#3F5A2A;">
+                    {{ m.file.name|slice:"-4:"|cut:"."|upper }}
+                </span>
+
+                <div class="ttl">
+                    <h3 class="serif" style="font-size:20px;font-weight:700;line-height:1.3; margin:0;">{{ m.title }}</h3>
+                    <p class="muted" style="font-size:14px; margin:4px 0 0 0;">
+                        {{ m.subject }} · {{ m.teacher }} · {{ m.get_course_display }} · {{ m.year }}
+                        {% for tag in m.tags.all %} · #{{ tag }}{% endfor %}
+                    </p>
+                </div>
             </div>
-            <span style="display:flex;gap:8px"><a class="btn ghost" href="{{ m.file.url }}" target="_blank">Открыть</a><a class="btn" href="{{ m.file.url }}" download>Скачать</a></span>
+
+            <!-- Действия: Избранное (переведено на fetch) + Скачивание -->
+            <span style="display:flex; gap:8px; align-items:center;">
+                <!-- Кнопка Избранного с data-id материала -->
+                <button type="button" class="btn ghost favorite-btn" data-material-id="{{ m.id }}" style="padding:8px 12px; font-size:18px;">
+                    ☆
+                </button>
+                <a class="btn ghost" href="{{ m.file.url }}" target="_blank">Открыть</a>
+                <a class="btn" href="{{ m.file.url }}" download>Скачать</a>
+            </span>
         </div>
         {% empty %}
-        <p class="muted">Пока нет ни одного материала.</p>
+        <p class="muted" style="padding:16px 0; font-style:italic;">Пока нет ни одного материала.</p>
         {% endfor %}
     </div>
 </div>
+
+<!-- JS-скрипт обработки Избранного на FETCH вместо localStorage -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    const favoriteButtons = document.querySelectorAll('.favorite-btn');
+
+    favoriteButtons.forEach(button => {
+    button.addEventListener('click', function() {
+    const materialId = this.getAttribute('data-material-id');
+    const isFavorite = this.textContent.trim() === '★';
+
+    // Отправляем fetch на бэкенд для изменения статуса закладки
+    fetch(`/materials/${materialId}/toggle_favorite/`, {
+    method: 'POST',
+    headers: {
+    'Content-Type': 'application/json',
+    'X-CSRFToken': getCookie('csrftoken')
+    },
+    body: JSON.stringify({ favorite: !isFavorite })
+    })
+    .then(response => {
+    // Визуально переключаем звездочку (работает и как заглушка, если url еще не создан)
+    if (this.textContent.trim() === '☆') {
+    this.textContent = '★';
+    this.style.color = '#3F5A2A';
+    } else {
+    this.textContent = '☆';
+    this.style.color = '';
+    }
+
+    if (response.ok) {
+    console.log('Статус избранного успешно обновлен на сервере');
+    } else {
+    console.log('Сервер принял fetch, но Артём ещё не создал view для обработки фаворитов');
+    }
+    })
+    .catch(error => {
+    console.error('Ошибка сети при отправке fetch:', error);
+    });
+    });
+    });
+
+    // Функция получения CSRF-токена
+    function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+    const cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+    const cookie = cookies[i].trim();
+    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+    break;
+    }
+    }
+    }
+    return cookieValue;
+    }
+    });
+</script>
 {% endblock %}
