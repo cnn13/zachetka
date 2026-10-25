@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Таймер{% endblock %}
+{% block title %}Таймер — Зачётка{% endblock %}
 
 {% block content %}
 <div class="wrap">
@@ -16,7 +16,7 @@
     </div>
 
     <div style="display:flex;flex-wrap:wrap;gap:56px">
-        <!-- Левая колонка: Таймер, полоса прогресса и три кнопки -->
+        <!-- Левая колонка: Таймер, полоса прогресса, выбор предмета и кнопки -->
         <div style="flex:1 1 440px;display:flex;flex-direction:column;gap:28px">
             <span style="display:flex">
                 <button type="button" id="work-btn" class="st on">Работа 25 мин</button>
@@ -24,9 +24,19 @@
             </span>
             <span id="countdown" class="serif" style="font-size:clamp(64px,9vw,120px);font-weight:700;line-height:.9;color:#26331A">25:00</span>
 
-            <!-- Полоса прогресса из оригинального макета -->
+            <!-- Полоса прогресса -->
             <div style="height:6px;background:#DCE7BE">
                 <div id="progress-bar" style="width:0%;height:100%;background:#3F5A2A;transition:width 1s linear;"></div>
+            </div>
+
+            <!-- Выбор предмета -->
+            <div style="display:flex; flex-direction:column; gap:8px">
+                <span class="lbl">Что изучаешь прямо сейчас?</span>
+                <select id="subject-select" style="width:100%; max-width:440px; padding:12px; border-radius:8px; background:#F3F6E8; border:1px solid #C9D6A9; font-family:inherit; font-size:16px;">
+                    <option value="Математический анализ">Математический анализ</option>
+                    <option value="История">История</option>
+                    <option value="Физика">Физика</option>
+                </select>
             </div>
 
             <div style="display:flex;flex-wrap:wrap;gap:12px">
@@ -36,28 +46,52 @@
             </div>
         </div>
 
-        <!-- Правая колонка: Статистика сессий -->
+        <!-- Правая колонка: ДИНАМИЧЕСКИЙ ВЫВОД СЕССИЙ (Задача 3.7) -->
         <div style="flex:1 1 320px;display:flex;flex-direction:column;gap:32px">
             <div style="display:flex;border-top:1px solid #C9D6A9;border-bottom:1px solid #C9D6A9">
-                <div style="flex:1;padding:16px 0"><span class="lbl">Сегодня</span><p class="serif" style="font-size:32px;font-weight:700;color:#3F5A2A">1,5 ч</p></div>
-                <div style="flex:1;padding:16px 24px;border-left:1px solid #C9D6A9"><span class="lbl">За неделю</span><p class="serif" style="font-size:32px;font-weight:700">9 ч</p></div>
+                <div style="flex:1;padding:16px 0">
+                    <span class="lbl">Сегодня</span>
+                    <p class="serif" style="font-size:32px;font-weight:700;color:#3F5A2A">
+                        {% if today_hours %}{{ today_hours }} ч{% else %}0 ч{% endif %}
+                    </p>
+                </div>
+                <div style="flex:1;padding:16px 24px;border-left:1px solid #C9D6A9">
+                    <span class="lbl">За неделю</span>
+                    <p class="serif" style="font-size:32px;font-weight:700">
+                        {% if week_hours %}{{ week_hours }} ч{% else %}0 ч{% endif %}
+                    </p>
+                </div>
             </div>
+
             <div>
-                <h2 class="serif" style="font-size:22px;font-weight:700;margin-bottom:8px">Завершённые сессии</h2>
-                <div class="row" style="padding:14px 0"><span class="muted" style="width:56px">10:15</span><span style="flex:1">Математический анализ</span><span class="lbl">25 мин</span></div>
-                <div class="row" style="padding:14px 0"><span class="muted" style="width:56px">10:45</span><span style="flex:1">Математический анализ</span><span class="lbl">25 мин</span></div>
-                <div class="row last" style="padding:14px 0"><span class="muted" style="width:56px">12:00</span><span style="flex:1">История</span><span class="lbl">25 мин</span></div>
+                <h2 class="serif" style="font-size:22px;font-weight:700;margin-bottom:16px">Завершённые сессии</h2>
+
+                <div style="display:flex; flex-direction:column; gap:4px">
+                    {% for session in sessions %}
+                    <div class="row" style="padding:14px 0; display:flex; justify-content:space-between; align-items:center;">
+                        <span class="muted" style="width:56px;">{{ session.created_at|date:"H:i" }}</span>
+                        <span style="flex:1; font-weight:600;">{{ session.subject_name }}</span>
+                        <span class="lbl" style="background:#E2E8F0; padding:2px 8px; border-radius:6px;">{{ session.duration_minutes }} мин</span>
+                    </div>
+                    {% empty %}
+                    <!-- Умная заглушка из Figma, если бэкенд пустой -->
+                    <div style="background:#F8FAFC; border:1px dashed #C9D6A9; padding:24px; border-radius:8px; text-align:center;">
+                        <p class="muted" style="margin:0; font-style:italic; font-size:15px;">Вы ещё не провели ни одной сессии сегодня. Время сфокусироваться!</p>
+                    </div>
+                    {% endfor %}
+                </div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- JavaScript с поддержкой шкалы прогресса -->
+<!-- JavaScript Помодоро-таймера -->
 <script>
     let timer = null; let totalDuration = 25 * 60; let timeLeft = totalDuration; let isWork = true;
     const display = document.getElementById('countdown'); const startBtn = document.getElementById('start-btn');
     const pauseBtn = document.getElementById('pause-btn'); const bar = document.getElementById('progress-bar');
     const wBtn = document.getElementById('work-btn'); const bBtn = document.getElementById('break-btn');
+    const subjectSelect = document.getElementById('subject-select');
 
     function update() {
     let m = Math.floor(timeLeft / 60); let s = timeLeft % 60;
@@ -70,7 +104,15 @@
     clearInterval(timer); timer = null; isWork = w;
     totalDuration = isWork ? 25 * 60 : 5 * 60; timeLeft = totalDuration;
     update();
-    if(isWork){wBtn.classList.add('on');wBtn.disabled=false;bBtn.classList.remove('on')}else{bBtn.classList.add('on');wBtn.classList.remove('on')}
+    if(isWork){
+    wBtn.classList.add('on');
+    bBtn.classList.remove('on');
+    subjectSelect.disabled = false;
+    }else{
+    bBtn.classList.add('on');
+    wBtn.classList.remove('on');
+    subjectSelect.disabled = true;
+    }
     }
 
     wBtn.addEventListener('click', () => setMode(true)); bBtn.addEventListener('click', () => setMode(false));
@@ -79,12 +121,49 @@
     if (!timer) {
     timer = setInterval(() => {
     if (timeLeft > 0) { timeLeft--; update(); }
-    else { clearInterval(timer); timer = null; alert(isWork ? "Время вышло!" : "Перерыв окончен!"); setMode(!isWork); }
+    else {
+    clearInterval(timer); timer = null;
+    if (isWork) {
+    sendPomodoroSession(subjectSelect.value);
+    alert("Время вышло! Сессия работы сохранена.");
+    } else {
+    alert("Перерыв окончен!");
+    }
+    setMode(!isWork);
+    }
     }, 1000);
     }
     });
 
     pauseBtn.addEventListener('click', () => { if (timer) { clearInterval(timer); timer = null; } });
     document.getElementById('reset-btn').addEventListener('click', () => { clearInterval(timer); timer = null; timeLeft = totalDuration; update(); });
+
+    function sendPomodoroSession(subjectName) {
+    fetch('/timer/save_session/', {
+    method: 'POST',
+    headers: {
+    'Content-Type': 'application/json',
+    'X-CSRFToken': getCookie('csrftoken')
+    },
+    body: JSON.stringify({ subject_name: subjectName, duration_minutes: 25 })
+    })
+    .then(response => console.log('Fetch отправлен'))
+    .catch(error => console.error('Ошибка:', error));
+    }
+
+    function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+    const cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+    const cookie = cookies[i].trim();
+    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+    break;
+    }
+    }
+    }
+    return cookieValue;
+    }
 </script>
 {% endblock %}
