@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Subject, Ticket
+from .models import Subject, Ticket, TicketStatus
 
 
 @admin.register(Subject)
@@ -17,3 +17,9 @@ class TicketAdmin(admin.ModelAdmin):
     @admin.display(description="Текст вопроса")
     def short_text(self, obj):
         return obj.text[:80]
+
+
+@admin.register(TicketStatus)
+class TicketStatusAdmin(admin.ModelAdmin):
+    list_display = ["user", "ticket", "status", "updated_at"]
+    list_filter = ["status", "ticket__subject"]
