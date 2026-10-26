@@ -9,6 +9,7 @@ app_name = "accounts"
 urlpatterns = [
     path("", views.index, name="index"),
     path("register/", views.register, name="register"),
+    path("update_profile/", views.update_profile, name="update_profile"),
     path(
         "login/",
         auth_views.LoginView.as_view(template_name="accounts/login.html", authentication_form=LoginForm),

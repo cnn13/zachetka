@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import models
 
 
@@ -36,3 +37,42 @@ class Ticket(models.Model):
 
     def __str__(self):
         return f"{self.subject}: билет {self.number}"
+
+
+class TicketStatus(models.Model):
+    """Статус билета у конкретного пользователя (задачи 3.5–3.6).
+
+    У каждого пользователя свой статус: «не знаю», «плохо» или «выучил».
+    Если записи нет, считается «не знаю».
+    """
+
+    DONT_KNOW = "dont_know"
+    BAD = "bad"
+    LEARNED = "learned"
+    STATUS_CHOICES = [
+        (DONT_KNOW, "Не знаю"),
+        (BAD, "Плохо"),
+        (LEARNED, "Выучил"),
+    ]
+
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="ticket_statuses",
+        verbose_name="Пользователь",
+    )
+    ticket = models.ForeignKey(
+        Ticket, on_delete=models.CASCADE, related_name="statuses", verbose_name="Билет"
+    )
+    status = models.CharField("Статус", max_length=20, choices=STATUS_CHOICES, default=DONT_KNOW)
+    updated_at = models.DateTimeField("Изменён", auto_now=True)
+
+    class Meta:
+        verbose_name = "Статус билета"
+        verbose_name_plural = "Статусы билетов"
+        constraints = [
+            models.UniqueConstraint(fields=["user", "ticket"], name="unique_status_per_user_ticket")
+        ]
+
+    def __str__(self):
+        return f"{self.user}: {self.ticket} — {self.get_status_display()}"

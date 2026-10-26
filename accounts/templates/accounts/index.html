@@ -1,20 +1,138 @@
 {% extends "base.html" %}
 
-{% block title %}Профиль{% endblock %}
+{% block title %}Профиль — Зачётка{% endblock %}
 
 {% block content %}
-<h1 class="h3 mb-3">Профиль</h1>
-{% if user.is_authenticated %}
-  <div class="card">
-    <div class="card-body">
-      <p class="mb-1"><strong>Логин:</strong> {{ user.username }}</p>
-      <p class="mb-0"><strong>Группа:</strong> {% if profile %}{{ profile.group }}{% else %}не указана{% endif %}</p>
+<div class="wrap">
+    <div class="top" style="margin-bottom: 32px;">
+        <h1 class="h1">Профиль</h1>
     </div>
-  </div>
-{% else %}
-  <div class="alert alert-secondary">
-    Чтобы загружать материалы и добавлять билеты, <a href="{% url 'accounts:login' %}">войдите</a>
-    или <a href="{% url 'accounts:register' %}">зарегистрируйтесь</a>.
-  </div>
-{% endif %}
+
+    {% if user.is_authenticated %}
+    <div style="display:flex; flex-wrap:wrap; gap:40px;">
+
+        <!-- ЛЕВАЯ КОЛОНКА: Данные студента -->
+        <div style="flex:1 1 400px; display:flex; flex-direction:column; gap:24px;">
+            <div style="background:#F3F6E8; padding:24px; border-radius:12px; border:1px solid #C9D6A9;">
+                <h2 class="serif" style="font-size:24px; margin-bottom:16px; color:#3F5A2A;">{{ user.username }}</h2>
+
+                <!-- Асинхронная форма обновления группы через fetch -->
+                <form id="profile-form" style="display:flex; flex-direction:column; gap:12px;">
+                    <div style="display:flex; flex-direction:column; gap:6px;">
+                        <label class="lbl" for="group-input">Учебная группа:</label>
+                        <div style="display:flex; gap:8px;">
+                            <select id="group-input"
+                                    style="padding:10px; border-radius:6px; border:1px solid #C9D6A9; background:#FFF; font-family:inherit; flex-grow:1;">
+                                {% if not profile %}<option value="">— выберите группу —</option>{% endif %}
+                                {% for group in groups %}
+                                <option value="{{ group.name }}"{% if profile and profile.group_id == group.id %} selected{% endif %}>{{ group.name }}</option>
+                                {% empty %}
+                                <option value="">Список групп пуст</option>
+                                {% endfor %}
+                            </select>
+                            <button type="submit" class="btn" style="padding:10px 16px;">Сохранить</button>
+                        </div>
+                        <span id="form-status" style="font-size:14px; display:none; margin-top:4px;"></span>
+                    </div>
+                </form>
+            </div>
+
+            <div>
+                <a class="btn ghost" href="{% url 'accounts:logout' %}" style="color:#C64B2B; border-color:#C64B2B;">Выйти из аккаунта</a>
+            </div>
+        </div>
+
+        <!-- ПРАВАЯ КОЛОНКА: Статистика и стрики из Figma -->
+        <div style="flex:1 1 300px; display:flex; flex-direction:column; gap:24px;">
+            <h2 class="serif" style="font-size:22px; margin-bottom:8px;">Твои успехи</h2>
+
+            <div style="display:flex; border-top:1px solid #C9D6A9; border-bottom:1px solid #C9D6A9; padding:16px 0;">
+                <div style="flex:1; text-align:center;">
+                    <span class="lbl">Стрик дней 🔥</span>
+                    <p class="serif" style="font-size:32px; font-weight:700; color:#3F5A2A; margin:4px 0 0 0;">5 дн.</p>
+                </div>
+                <div style="flex:1; text-align:center; border-left:1px solid #C9D6A9;">
+                    <span class="lbl">Рейтинг 🏆</span>
+                    <p class="serif" style="font-size:32px; font-weight:700; margin:4px 0 0 0;">#12</p>
+                </div>
+            </div>
+
+            <!-- Достижения / Ачивки -->
+            <div>
+                <span class="lbl">Ачивки сессии</span>
+                <div style="display:flex; gap:8px; margin-top:12px; flex-wrap:wrap;">
+                    <span title="Выучил первый предмет" style="background:#DCE7BE; padding:8px 12px; border-radius:20px; font-size:14px;">🎓 Первый пошёл</span>
+                    <span title="Отработал 4 помодоро за день" style="background:#F6C3B2; padding:8px 12px; border-radius:20px; font-size:14px;">🍅 Сверхпродуктивность</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    {% else %}
+    <div class="alert alert-secondary" style="background:#F3F6E8; padding:24px; border-radius:8px; border:1px solid #C9D6A9; text-align:center;">
+        <p style="font-size:18px; margin-bottom:16px;">Чтобы отслеживать прогресс, загружать материалы и сдавать билеты, войдите в систему.</p>
+        <a class="btn" href="{% url 'accounts:login' %}" style="margin-right:12px;">Войти</a>
+        <a class="btn ghost" href="{% url 'accounts:register' %}">Зарегистрироваться</a>
+    </div>
+    {% endif %}
+</div>
+
+<!-- JS-скрипт обновления профиля на FETCH -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    const profileForm = document.getElementById('profile-form');
+    if (profileForm) {
+    profileForm.addEventListener('submit', function(e) {
+    e.preventDefault(); // Отменяем перезагрузку страницы
+
+    const groupValue = document.getElementById('group-input').value;
+    const statusSpan = document.getElementById('form-status');
+
+    statusSpan.style.display = 'inline-block';
+    statusSpan.style.color = '#666';
+    statusSpan.textContent = 'Сохранение...';
+
+    // Отправляем асинхронный запрос на сохранение группы
+    fetch('/accounts/update_profile/', {
+    method: 'POST',
+    headers: {
+    'Content-Type': 'application/json',
+    'X-CSRFToken': getCookie('csrftoken')
+    },
+    body: JSON.stringify({ group: groupValue })
+    })
+    .then(response => response.json().then(data => ({ ok: response.ok, data })))
+    .then(({ ok, data }) => {
+    if (ok) {
+    statusSpan.style.color = '#3F5A2A';
+    statusSpan.textContent = '✓ Группа обновлена: ' + data.group;
+    } else {
+    statusSpan.style.color = '#C64B2B';
+    statusSpan.textContent = data.error || 'Не удалось сохранить группу';
+    }
+    })
+    .catch(error => {
+    console.error('Ошибка сети:', error);
+    statusSpan.style.color = '#C64B2B';
+    statusSpan.textContent = 'Ошибка соединения с сервером';
+    });
+    });
+    }
+
+    function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+    const cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+    const cookie = cookies[i].trim();
+    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+    break;
+    }
+    }
+    }
+    return cookieValue;
+    }
+    });
+</script>
 {% endblock %}
