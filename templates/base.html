@@ -2,303 +2,50 @@
 <!doctype html>
 <html lang="ru">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{% block title %}Зачётка{% endblock %} · Зачётка</title>
-    <link href="https://googleapis.com" rel="stylesheet">
-    <style>
-        body {
-            margin: 0;
-            font-family: 'Manrope',system-ui,sans-serif;
-            background: #F3F6E8;
-            color: #26331A;
-            line-height: 1.5
-        }
-
-        a {
-            color: #3F5A2A
-        }
-
-        h1, h2, h3, p {
-            margin: 0
-        }
-
-        .serif {
-            font-family: 'Manrope',system-ui,sans-serif
-        }
-
-        .nav {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            gap: 0 32px;
-            padding: 8px 40px;
-            border-bottom: 1px solid #C9D6A9;
-            font-size: 12px;
-            letter-spacing: .12em;
-            text-transform: uppercase
-        }
-
-            .nav a {
-                color: #26331A;
-                text-decoration: none;
-                min-height: 44px;
-                display: inline-flex;
-                align-items: center
-            }
-
-                .nav a.on {
-                    color: #3F5A2A;
-                    text-decoration: underline
-                }
-
-                .nav a.brand {
-                    margin-right: auto;
-                    font-family: 'Manrope',system-ui,sans-serif;
-                    font-size: 22px;
-                    font-weight: 700;
-                    text-transform: none;
-                    letter-spacing: 0;
-                    color: #3F5A2A
-                }
-
-        .wrap {
-            max-width: 1180px;
-            margin: 0 auto;
-            padding: 56px 40px 96px;
-            display: flex;
-            flex-direction: column;
-            gap: 56px
-        }
-
-        .lbl {
-            font-size: 12px;
-            letter-spacing: .12em;
-            text-transform: uppercase;
-            color: #5F7345
-        }
-
-        .muted {
-            color: #5F7345
-        }
-
-        .mark {
-            display: inline-block;
-            width: fit-content;
-            background: #F6C3B2;
-            color: #26331A;
-            padding: 2px 8px;
-            font-size: 12px;
-            letter-spacing: .06em;
-            text-transform: uppercase;
-            font-weight: 600
-        }
-
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 44px;
-            padding: 0 24px;
-            background: #3F5A2A;
-            color: #F3F6E8;
-            font: inherit;
-            font-weight: 600;
-            font-size: 13px;
-            letter-spacing: .1em;
-            text-transform: uppercase;
-            text-decoration: none;
-            border: 1px solid #3F5A2A;
-            cursor: pointer
-        }
-
-            .btn.ghost {
-                background: transparent;
-                color: #26331A;
-                border-color: #3F5A2A
-            }
-
-        .st {
-            display: inline-flex;
-            align-items: center;
-            min-height: 44px;
-            padding: 0 16px;
-            border: 1px solid #9CB07A;
-            color: #26331A;
-            text-decoration: none;
-            font-size: 14px;
-            background: transparent;
-            cursor: pointer
-        }
-
-            .st + .st {
-                margin-left: -1px
-            }
-
-            .st.on {
-                background: #3F5A2A;
-                color: #F3F6E8;
-                border-color: #3F5A2A
-            }
-
-        select, textarea {
-            min-height: 44px;
-            border: 0;
-            border-bottom: 1px solid #9CB07A;
-            border-radius: 0;
-            background: transparent;
-            color: #26331A;
-            font: inherit;
-            width: 100%;
-            box-sizing: border-box;
-            padding: 0 12px
-        }
-
-        textarea {
-            border: 1px solid #9CB07A;
-            padding: 12px
-        }
-
-        select option {
-            background: #F3F6E8
-        }
-
-        label {
-            display: flex;
-            flex-direction: column;
-            gap: 4px
-        }
-
-        .row {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            gap: 12px 32px;
-            padding: 24px 0;
-            border-top: 1px solid #C9D6A9;
-            text-decoration: none;
-            color: #26331A
-        }
-
-            .row.last {
-                border-bottom: 1px solid #C9D6A9
-            }
-
-            .row .ttl {
-                flex: 1 1 300px
-            }
-
-        a.row:hover .ttl {
-            color: #3F5A2A
-        }
-
-        .grid4 {
-            display: grid;
-            gap: 24px;
-            grid-template-columns: repeat(auto-fit,minmax(200px,1fr))
-        }
-
-        .top {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 24px;
-            justify-content: space-between;
-            align-items: flex-end
-        }
-
-        .h1 {
-            font-family: 'Manrope',system-ui,sans-serif;
-            letter-spacing: -.02em;
-            font-weight: 800;
-            font-size: clamp(32px,4.5vw,52px);
-            line-height: .95;
-            color: #3F5A2A
-        }
-
-        .foot {
-            border-top: 1px solid #C9D6A9;
-            padding: 24px 40px;
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            gap: 0 32px;
-            font-size: 13px;
-            color: #5F7345;
-            margin-top: auto
-        }
-
-            .foot a {
-                color: #26331A;
-                text-decoration: none;
-                min-height: 44px;
-                display: inline-flex;
-                align-items: center
-            }
-
-                .foot a.brand {
-                    margin-right: auto;
-                    font-weight: 800;
-                    font-size: 18px;
-                    color: #3F5A2A
-                }
-
-    /* Кнопка «Выйти» в меню выглядит как ссылка */
-    .nav-btn { background: none; border: 0; padding: 0 12px; min-height: 44px; font: inherit; color: inherit; cursor: pointer; }
-    .msgs { max-width: 1200px; margin: 16px auto 0; padding: 0 24px; }
-
-    /* Формы и подсказки (вход, регистрация, загрузка, добавление билетов) */
-    .form-label { display: block; font-size: 13px; font-weight: 700; margin-bottom: 6px; }
-    .form-control, .form-select { width: 100%; box-sizing: border-box; padding: 10px 12px; font: inherit; border: 1px solid #C9D6A9; border-radius: 8px; background: #fff; }
-    .form-text { font-size: 13px; color: #5F7345; margin-top: 4px; }
-    .text-danger { color: #A33A2A; font-size: 13px; }
-    .mb-3 { margin-bottom: 16px; }
-    .alert { padding: 12px 16px; border-radius: 8px; background: #DCE7BE; color: #26331A; margin-bottom: 12px; }
-    .alert-danger, .alert-error { background: #F3D6CF; color: #6B1F12; }
-    .alert-warning { background: #F6E7B8; }
-    .btn-link { background: none; border: 0; text-decoration: underline; color: #3F5A2A; }
-
-    </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}Зачётка{% endblock %} · Зачётка</title>
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+<style>
+:root{--bg:#f3f6e8;--text:#26331a;--green:#3f5a2a;--light:#dce7be;--line:#c9d6a9;--muted:#5f7345}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.55 Manrope,system-ui,-apple-system,"Segoe UI",sans-serif;min-height:100vh;display:flex;flex-direction:column}
+a{color:var(--green)}h1,h2,h3,p{margin-top:0}h1,h2,h3{line-height:1.2}.serif{font-family:inherit} .muted{color:var(--muted)}
+.nav{display:flex;align-items:center;gap:0 30px;flex-wrap:wrap;padding:10px clamp(18px,4vw,48px);border-bottom:1px solid var(--line);font-size:12px;letter-spacing:.11em;text-transform:uppercase}
+.nav a{display:inline-flex;align-items:center;min-height:44px;text-decoration:none;color:var(--text)}.nav a:hover,.nav a.on{color:var(--green);text-decoration:underline}
+.nav a.brand{font-weight:800;font-size:23px;color:var(--green);letter-spacing:0;text-transform:none;margin-right:auto;text-decoration:none}
+.nav button{border:0;background:none;font:inherit;color:var(--text);text-transform:uppercase;letter-spacing:inherit;cursor:pointer;min-height:44px}.nav button:hover{text-decoration:underline}
+.wrap{width:100%;max-width:1180px;margin:0 auto;padding:48px 40px 84px;display:flex;flex-direction:column;gap:35px;flex:1}
+.h1{font-size:clamp(32px,4.5vw,52px);font-weight:800;letter-spacing:-.035em;color:var(--green);line-height:1.05;margin:0}
+.top{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}.grid4{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:18px}
+.lbl{font-size:12px;letter-spacing:.11em;text-transform:uppercase;color:var(--muted)}
+.btn{min-height:44px;border:1px solid var(--green);background:var(--green);color:var(--bg);display:inline-flex;align-items:center;justify-content:center;padding:10px 20px;text-decoration:none;font:600 13px/1.3 inherit;letter-spacing:.07em;text-transform:uppercase;cursor:pointer;gap:8px}
+.btn:hover{filter:brightness(.9)}.btn.ghost{background:transparent;color:var(--green)}.st{border:1px solid #9cb07a;background:transparent;color:var(--text);padding:10px 14px;min-height:42px;font:inherit;cursor:pointer}.st.on{background:var(--green);border-color:var(--green);color:white}
+.row{display:flex;flex-wrap:wrap;align-items:center;gap:12px 26px;padding:21px 0;border-top:1px solid var(--line)}.row.last{border-bottom:1px solid var(--line)}.row .ttl{flex:1 1 250px}
+.mark{display:inline-block;width:max-content;background:#f6c3b2;padding:5px 8px;font-size:12px;font-weight:700;letter-spacing:.05em}
+label{display:flex;flex-direction:column;gap:5px}select,input,textarea{font:inherit;color:var(--text);padding:10px 12px;min-height:44px;max-width:100%;border:1px solid #9cb07a;background:#fff}select,textarea,.form-control,.form-select{width:100%}textarea{resize:vertical}
+.form-panel{max-width:620px;width:100%;margin:auto;display:flex;flex-direction:column;gap:26px}.form-panel form{display:flex;flex-direction:column;gap:13px}.form-label{font-size:14px;font-weight:700;display:block;margin-bottom:6px}.form-text{font-size:12px;color:var(--muted)}.mb-3{margin-bottom:12px}.text-danger{color:#a33a2a;font-size:13px}
+.alert{border-radius:5px;background:var(--light);padding:12px 16px}.alert-error,.alert-danger{background:#f6d7cf;color:#6b1f12}.alert-warning{background:#f6e7b8}
+.panel{border:1px solid var(--line);padding:24px;display:flex;flex-direction:column;gap:15px}.panel h2{font-size:23px;margin:0}.panel p{margin:0}.panel .btn{align-self:start}
+.foot{margin-top:auto;padding:24px clamp(18px,4vw,48px);border-top:1px solid var(--line);display:flex;gap:14px 30px;flex-wrap:wrap;align-items:center;font-size:13px;color:var(--muted)}.foot a{color:var(--text);text-decoration:none}.foot a.brand{color:var(--green);font-size:19px;font-weight:800;margin-right:auto}
+.msgs{max-width:1180px;width:100%;margin:16px auto 0;padding:0 40px}
+@media(max-width:660px){.nav{gap:0 14px;font-size:11px}.nav a.brand{width:100%}.wrap{padding:30px 20px 54px;gap:28px}.row{gap:12px}.foot{gap:12px}.btn{padding:10px 12px}}
+</style>
 </head>
-<body class="d-flex flex-column min-vh-100">
-
-    <!-- ВЕРХНЕЕ МЕНЮ: С умным выделением текущей страницы -->
-    <nav class="nav" aria-label="Главное меню">
-        <a class="brand" href="{% url 'home' %}">Зачётка</a>
-        <a href="{% url 'materials:index' %}" class="{% if request.resolver_match.app_name == 'materials' %}on{% endif %}">Архив</a>
-        <a href="{% url 'tickets:index' %}" class="{% if request.resolver_match.app_name == 'tickets' %}on{% endif %}">Билеты</a>
-        <a href="{% url 'timer:index' %}" class="{% if request.resolver_match.app_name == 'timer' %}on{% endif %}">Таймер</a>
-        {% if user.is_authenticated %}
-        <a href="{% url 'accounts:index' %}" class="{% if request.resolver_match.app_name == 'accounts' %}on{% endif %}">{{ user.username }}</a>
-        <form method="post" action="{% url 'accounts:logout' %}" style="display:inline-flex;margin:0">
-            {% csrf_token %}
-            <button type="submit" class="nav-btn">Выйти</button>
-        </form>
-        {% else %}
-        <a href="{% url 'accounts:login' %}" class="{% if request.resolver_match.url_name == 'login' %}on{% endif %}">Войти</a>
-        <a href="{% url 'accounts:register' %}" class="{% if request.resolver_match.url_name == 'register' %}on{% endif %}">Регистрация</a>
-        {% endif %}
-    </nav>
-
-<!-- Сообщения (например, «Материал загружен») -->
-{% if messages %}
-<div class="msgs">
-    {% for message in messages %}
-    <div class="alert alert-{{ message.tags|default:'info' }}">{{ message }}</div>
-    {% endfor %}
-</div>
+<body>
+<nav class="nav" aria-label="Главное меню">
+<a class="brand" href="{% url 'home' %}">Зачётка</a>
+<a href="{% url 'materials:index' %}" class="{% if request.resolver_match.app_name == 'materials' %}on{% endif %}">Архив</a>
+<a href="{% url 'tickets:index' %}" class="{% if request.resolver_match.app_name == 'tickets' %}on{% endif %}">Билеты</a>
+<a href="{% url 'timer:index' %}" class="{% if request.resolver_match.app_name == 'timer' %}on{% endif %}">Таймер</a>
+{% if user.is_authenticated %}
+<a href="{% url 'accounts:index' %}" class="{% if request.resolver_match.app_name == 'accounts' %}on{% endif %}">{{ user.username }}</a>
+{% if user.is_staff %}<a href="{% url 'admin:index' %}">Админка</a>{% endif %}
+<form method="post" action="{% url 'accounts:logout' %}">{% csrf_token %}<button type="submit">Выйти</button></form>
+{% else %}
+<a href="{% url 'accounts:login' %}">Войти</a><a href="{% url 'accounts:register' %}">Регистрация</a>
 {% endif %}
-
-    {% block content %}{% endblock %}
-
-    <!-- ОРИГИНАЛЬНЫЙ ПОДВАЛ: Чистый, без выделений, ссылки ровно справа -->
-    <footer class="foot">
-        <a class="brand" href="{% url 'home' %}">Зачётка</a>
-        <a href="{% url 'materials:index' %}">Архив</a>
-        <a href="{% url 'tickets:index' %}">Билеты</a>
-        <a href="{% url 'timer:index' %}">Таймер</a>
-        <a href="{% url 'accounts:index' %}">Профиль</a>
-        <span>© 2026 Зачётка</span>
-    </footer>
-
-</body>
-</html>
+</nav>
+{% if messages %}<div class="msgs">{% for message in messages %}<p class="alert {% if message.tags == 'error' %}alert-error{% endif %}">{{ message }}</p>{% endfor %}</div>{% endif %}
+{% block content %}{% endblock %}
+<footer class="foot"><a class="brand" href="{% url 'home' %}">Зачётка</a><a href="{% url 'materials:index' %}">Архив</a><a href="{% url 'tickets:index' %}">Билеты</a><a href="{% url 'timer:index' %}">Таймер</a><a href="{% url 'accounts:index' %}">Профиль</a><span>© 2026 Зачётка</span></footer>
+</body></html>

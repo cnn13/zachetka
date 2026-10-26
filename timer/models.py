@@ -1,7 +1,15 @@
+from django.conf import settings
 from django.db import models
 
-# Задача 2.8 (Т): позже здесь появится модель PomodoroSession
-# (кто, когда начал, сколько минут). В спринте 1 модель не нужна —
-# сначала сделай страницу таймера на JavaScript (задача 1.8):
-#   шаблон  templates/timer/index.html
-#   скрипт  static/js/timer.js
+class PomodoroSession(models.Model):
+    """Завершённая учебная сессия пользователя."""
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="pomodoro_sessions")
+    subject_name = models.CharField("Предмет", max_length=200)
+    duration_minutes = models.PositiveSmallIntegerField("Минут", default=25)
+    client_token = models.CharField("Идентификатор цикла", max_length=100)
+    created_at = models.DateTimeField("Завершено", auto_now_add=True)
+    class Meta:
+        constraints = [models.UniqueConstraint(fields=["user", "client_token"], name="unique_pomodoro_session_per_user")]
+        ordering = ["-created_at"]
+        verbose_name = "Помодоро-сессия"
+        verbose_name_plural = "Помодоро-сессии"

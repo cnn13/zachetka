@@ -1,20 +1,17 @@
 {% extends "base.html" %}
-
 {% block title %}Профиль{% endblock %}
-
 {% block content %}
-<h1 class="h3 mb-3">Профиль</h1>
+<div class="wrap"><div class="top"><h1 class="h1">Профиль</h1></div>
 {% if user.is_authenticated %}
-  <div class="card">
-    <div class="card-body">
-      <p class="mb-1"><strong>Логин:</strong> {{ user.username }}</p>
-      <p class="mb-0"><strong>Группа:</strong> {% if profile %}{{ profile.group }}{% else %}не указана{% endif %}</p>
-    </div>
-  </div>
-{% else %}
-  <div class="alert alert-secondary">
-    Чтобы загружать материалы и добавлять билеты, <a href="{% url 'accounts:login' %}">войдите</a>
-    или <a href="{% url 'accounts:register' %}">зарегистрируйтесь</a>.
-  </div>
-{% endif %}
-{% endblock %}
+<div class="grid4"><section class="panel"><h2>{{ user.username }}</h2><p class="muted">Учебная группа</p>
+<form id="profile-form" data-url="{% url 'accounts:update_profile' %}">{% csrf_token %}
+<select id="group-input" name="group">{% for group in groups %}<option value="{{ group.name }}" {% if profile and profile.group_id == group.id %}selected{% endif %}>{{ group.name }}</option>{% endfor %}</select>
+<button class="btn" type="submit" style="margin-top:12px">Сохранить</button><p id="form-status" aria-live="polite"></p></form></section>
+<section class="panel"><h2>Твои успехи</h2><p>Прогресс билетов и завершённые занятия доступны в разделах «Билеты» и «Таймер».</p>
+<a class="btn ghost" href="{% url 'timer:sessions' %}">Мои сессии</a></section></div>
+{% else %}<p>Для просмотра профиля войдите в аккаунт.</p><a href="{% url 'accounts:login' %}" class="btn">Войти</a>{% endif %}
+</div>
+<script>
+const pf=document.getElementById('profile-form');
+if(pf)pf.addEventListener('submit',async e=>{e.preventDefault();const out=document.getElementById('form-status');try{let r=await fetch(pf.dataset.url,{method:'POST',headers:{'Content-Type':'application/json','X-CSRFToken':pf.querySelector('[name=csrfmiddlewaretoken]').value},body:JSON.stringify({group:document.getElementById('group-input').value})});let d=await r.json();out.textContent=r.ok?'Группа сохранена':(d.error||'Ошибка сохранения');}catch{out.textContent='Ошибка соединения';}});
+</script>{% endblock %}

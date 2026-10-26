@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Мои сессии{% endblock %}
+{% block content %}
+<div class="wrap">
+  <div class="top"><div><h1 class="h1">Мои сессии</h1><p class="muted">История подготовки по таймеру Помодоро</p></div><a class="btn ghost" href="{% url 'timer:index' %}">К таймеру</a></div>
+  <div class="grid4">
+    <section class="panel"><span class="lbl">Всего времени</span><strong style="font-size:34px;color:#3F5A2A">{{ total_hours }} ч</strong></section>
+    <section class="panel"><span class="lbl">Завершено сессий</span><strong style="font-size:34px;color:#3F5A2A">{{ session_count }}</strong></section>
+    <section class="panel"><span class="lbl">Сегодня</span><strong style="font-size:34px;color:#3F5A2A">{{ today_hours }} ч</strong></section>
+    <section class="panel"><span class="lbl">За 7 дней</span><strong style="font-size:34px;color:#3F5A2A">{{ week_hours }} ч</strong></section>
+  </div>
+  <div class="panel"><h2>Активность за последние 7 дней</h2>
+    <div style="height:205px;display:flex;align-items:flex-end;gap:12px;border-bottom:1px solid #C9D6A9">
+    {% for day in week_chart %}
+      <div style="height:100%;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:7px">
+        <span class="muted" style="font-size:12px">{{ day.minutes }} мин</span>
+        <div style="background:#3F5A2A;height:{{ day.height }}%;min-height:2px;width:70%;max-width:45px"></div>
+        <span class="lbl" style="font-size:10px">{{ day.label }}</span>
+      </div>
+    {% endfor %}</div>
+  </div>
+  <section><h2>История занятий</h2>
+    {% for session in sessions %}
+      <div class="row"><span class="muted">{{ session.created_at|date:'d.m.Y H:i' }}</span><strong class="ttl">{{ session.subject_name }}</strong><span class="lbl">{{ session.duration_minutes }} мин</span></div>
+    {% empty %}<p class="muted">Пока нет завершённых сессий. Начните работу с таймером.</p>{% endfor %}
+  </section>
+</div>
+{% endblock %}

@@ -1,22 +1,15 @@
 from django import forms
 from django.utils import timezone
-
 from config.forms import BootstrapFormMixin
-
 from .models import Material, Tag
-from .validators import ALLOWED_EXTENSIONS
+from .validators import ALLOWED_EXTENSIONS, MAX_SIZE
 
 MAX_TAGS = 10
 
 
 class MaterialUploadForm(BootstrapFormMixin, forms.ModelForm):
-    """Задача 2.4 (ФТ-02): загрузка PDF/JPG/PNG с тегами."""
-
-    tags_input = forms.CharField(
-        label="Теги",
-        required=False,
-        help_text="Через запятую, например: лекция, экзамен, шпаргалка",
-    )
+    """Загрузка материалов с серверной проверкой размера и типа."""
+    tags_input = forms.CharField(label="Теги", required=False, help_text="Через запятую: лекция, экзамен, шпаргалка")
 
     class Meta:
         model = Material
@@ -25,8 +18,14 @@ class MaterialUploadForm(BootstrapFormMixin, forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["file"].widget.attrs["accept"] = ",".join(f".{e}" for e in ALLOWED_EXTENSIONS)
-        self.fields["file"].help_text = "PDF, JPG или PNG, до 20 МБ"
+        self.fields["file"].help_text = "PDF, JPG или PNG, не более 20 МБ"
         self.fields["year"].initial = timezone.localdate().year
+
+    def clean_file(self):
+        file = self.cleaned_data["file"]
+        if file.size > MAX_SIZE:
+            raise forms.ValidationError("Файл больше 20 МБ. Выберите файл размером до 20 МБ.")
+        return file
 
     def clean_tags_input(self):
         names = []

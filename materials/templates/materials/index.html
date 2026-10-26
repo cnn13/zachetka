@@ -1,31 +1,70 @@
 {% extends "base.html" %}
-
 {% block title %}Архив материалов{% endblock %}
-
 {% block content %}
 <div class="wrap">
-    <div class="top">
-        <div style="display:flex;flex-direction:column;gap:16px"><h1 class="h1">Архив</h1></div>
-        {% if user.is_authenticated %}
-        <a class="btn" href="{% url 'materials:upload' %}">+ Загрузить материал</a>
-        {% else %}
-        <a class="btn ghost" href="{% url 'accounts:login' %}?next={% url 'materials:upload' %}">Войдите, чтобы загрузить</a>
-        {% endif %}
+  <div class="top">
+    <h1 class="h1">Архив</h1>
+    <a class="btn" href="{% url 'materials:upload' %}">+ Загрузить материал</a>
+  </div>
+  <form id="favorite-csrf-form" style="display:none">{% csrf_token %}</form>
+  <form method="get" action="{% url 'materials:index' %}" style="display:flex;flex-direction:column;gap:16px">
+    <label>Поиск
+      <input class="form-control" name="q" type="search" value="{{ selected.q }}" placeholder="Название, преподаватель или тег">
+    </label>
+    <div class="grid4">
+      <label>Предмет
+        <select name="subject"><option value="">Все предметы</option>
+          {% for s in subjects %}<option value="{{ s.subject_id }}" {% if selected.subject == s.subject_id|stringformat:'s' %}selected{% endif %}>{{ s.subject__name }}</option>{% endfor %}
+        </select>
+      </label>
+      <label>Преподаватель
+        <select name="teacher"><option value="">Все преподаватели</option>
+          {% for teacher in teachers %}<option value="{{ teacher }}" {% if selected.teacher == teacher %}selected{% endif %}>{{ teacher }}</option>{% endfor %}
+        </select>
+      </label>
+      <label>Курс
+        <select name="course"><option value="">Все курсы</option>
+          {% for course in courses %}<option value="{{ course }}" {% if selected.course == course|stringformat:'s' %}selected{% endif %}>{{ course }} курс</option>{% endfor %}
+        </select>
+      </label>
+      <label>Год
+        <select name="year"><option value="">Все годы</option>
+          {% for year in years %}<option value="{{ year }}" {% if selected.year == year|stringformat:'s' %}selected{% endif %}>{{ year }}</option>{% endfor %}
+        </select>
+      </label>
     </div>
-
-    <div style="border-bottom:1px solid #C9D6A9">
-        {% for m in materials %}
-        <div class="row">
-            <span class="mark" style="width:56px;text-align:center;">{{ m.file.name|slice:"-4:"|cut:"."|upper }}</span>
-            <div class="ttl">
-                <h3 class="serif" style="font-size:20px;font-weight:700;line-height:1.3">{{ m.title }}</h3>
-                <p class="muted" style="font-size:14px;margin-top:4px">{{ m.subject }} · {{ m.teacher }} · {{ m.get_course_display }} · {{ m.year }}{% for tag in m.tags.all %} · #{{ tag }}{% endfor %}</p>
-            </div>
-            <span style="display:flex;gap:8px"><a class="btn ghost" href="{{ m.file.url }}" target="_blank">Открыть</a><a class="btn" href="{{ m.file.url }}" download>Скачать</a></span>
-        </div>
-        {% empty %}
-        <p class="muted">Пока нет ни одного материала.</p>
-        {% endfor %}
+    <div style="display:flex;gap:12px;flex-wrap:wrap">
+      <button type="submit" class="btn">Применить фильтры</button>
+      <a class="btn ghost" href="{% url 'materials:index' %}">Сбросить фильтры</a>
     </div>
+  </form>
+  <div style="border-bottom:1px solid #C9D6A9">
+    {% for m in materials %}
+    <div class="row">
+      <span class="mark" style="width:56px;text-align:center">{{ m.file.name|slice:"-4:"|cut:"."|upper }}</span>
+      <div class="ttl">
+        <h3 class="serif" style="font-size:20px;font-weight:700;line-height:1.3">{{ m.title }}</h3>
+        <p class="muted" style="font-size:14px;margin-top:4px">{{ m.subject }} · {{ m.teacher }} · {{ m.get_course_display }} · {{ m.year }}{% for tag in m.tags.all %} · #{{ tag }}{% endfor %}</p>
+      </div>
+      <span style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="st favorite-btn {% if m.is_favorite %}on{% endif %}" type="button" title="Добавить или убрать из избранного" aria-label="Избранное" aria-pressed="{% if m.is_favorite %}true{% else %}false{% endif %}" data-url="{% url 'materials:toggle_favorite' m.pk %}">{% if m.is_favorite %}★{% else %}☆{% endif %}</button>
+        <a class="btn ghost" href="{% url 'materials:download' m.pk %}" target="_blank" rel="noopener">Открыть</a>
+        <a class="btn" href="{% url 'materials:download' m.pk %}?download=1">Скачать</a>
+      </span>
+    </div>
+    {% empty %}
+    <p class="muted" style="padding:24px 0">Ничего не найдено</p>
+    {% endfor %}
+  </div>
 </div>
+<script>
+const token=document.querySelector('#favorite-csrf-form [name=csrfmiddlewaretoken]').value;
+document.querySelectorAll('.favorite-btn').forEach(btn=>btn.addEventListener('click',async()=>{
+ const favorite=btn.getAttribute('aria-pressed')!=='true';btn.disabled=true;
+ try{const res=await fetch(btn.dataset.url,{method:'POST',headers:{'Content-Type':'application/json','X-CSRFToken':token},body:JSON.stringify({favorite})});
+  if(!res.ok)throw new Error('Сохранение не удалось');
+  const data=await res.json();btn.setAttribute('aria-pressed',String(data.favorite));btn.classList.toggle('on',data.favorite);btn.textContent=data.favorite?'★':'☆';
+ }catch(e){alert(e.message);}finally{btn.disabled=false;}
+}));
+</script>
 {% endblock %}

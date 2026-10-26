@@ -1,2 +1,2 @@
-/* Общие стили сайта. Сначала используйте классы Bootstrap,
-   а сюда пишите только то, чего в Bootstrap нет. */
+/* Базовые дополнительные стили. Главная палитра задана в base.html. */
+@media(max-width:600px){.wrap{padding:28px 18px 50px!important}.nav{padding:8px 18px!important;gap:8px 16px!important}.row{align-items:flex-start!important}}
