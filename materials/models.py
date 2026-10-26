@@ -53,3 +53,28 @@ class Material(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class Favorite(models.Model):
+    """Материал в избранном у пользователя (кнопка ★ в архиве)."""
+
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="favorites",
+        verbose_name="Пользователь",
+    )
+    material = models.ForeignKey(
+        Material, on_delete=models.CASCADE, related_name="favorites", verbose_name="Материал"
+    )
+    created_at = models.DateTimeField("Добавлен", auto_now_add=True)
+
+    class Meta:
+        verbose_name = "Избранное"
+        verbose_name_plural = "Избранное"
+        constraints = [
+            models.UniqueConstraint(fields=["user", "material"], name="unique_favorite_per_user")
+        ]
+
+    def __str__(self):
+        return f"{self.user}: {self.material}"

@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Material, Tag
+from .models import Favorite, Material, Tag
 
 
 @admin.register(Tag)
@@ -14,3 +14,8 @@ class MaterialAdmin(admin.ModelAdmin):
     list_filter = ["subject", "course", "year"]
     search_fields = ["title", "teacher"]
     filter_horizontal = ["tags"]
+
+
+@admin.register(Favorite)
+class FavoriteAdmin(admin.ModelAdmin):
+    list_display = ["user", "material", "created_at"]
